@@ -6,7 +6,7 @@ import '../../../core/colors.dart';
 import '../../../core/sizes.dart';
 import '../../../core/strings.dart';
 import '../view_models/expense_view_model.dart';
-import 'widgets/add_bill_sheet.dart';
+import 'add_bill_screen.dart';
 
 class HomeView extends StatefulWidget {
   final ExpenseViewModel viewModel;
@@ -17,30 +17,14 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin {
+class _HomeViewState extends State<HomeView> {
   final Map<String, bool> _expandedGroups = {};
-
-  // Animación de entrada / pulso para el botón "Agregar factura"
-  late final AnimationController _btnController;
-  late final Animation<double> _btnScale;
-  late final Animation<double> _btnOpacity;
 
   @override
   void initState() {
     super.initState();
-
-    _btnController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-    _btnScale = CurvedAnimation(parent: _btnController, curve: Curves.elasticOut);
-    _btnOpacity = CurvedAnimation(parent: _btnController, curve: Curves.easeIn);
-    Future.delayed(const Duration(milliseconds: 250), () {
-      if (mounted) _btnController.forward();
-    });
-
     widget.viewModel.loadExpenses().then((_) {
-      if (widget.viewModel.groups.isNotEmpty) {
+      if (mounted && widget.viewModel.groups.isNotEmpty) {
         setState(() {
           _expandedGroups[widget.viewModel.groups.first.id] = true;
         });
@@ -50,68 +34,34 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
 
   @override
   void dispose() {
-    _btnController.dispose();
     super.dispose();
   }
 
-  Future<void> _showAddBill(BuildContext context) async {
-    // Capturar el navigator ANTES del gap async para evitar uso de context tras await
-    final navigator = Navigator.of(context);
-
-    // Pequeña animación de pulso antes de abrir el sheet
-    await _btnController.reverse(from: 0.9);
-    if (!mounted) return;
-    _btnController.forward();
-
-    // Navegar con animación slide suave hacia arriba
-    navigator.push(
-      PageRouteBuilder(
-        opaque: false,
-        barrierColor: Colors.black54,
-        barrierDismissible: true,
-        transitionDuration: const Duration(milliseconds: 420),
-        reverseTransitionDuration: const Duration(milliseconds: 320),
-        pageBuilder: (context, animation, _) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
-            child: FadeTransition(
-              opacity: animation,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                // Material es requerido para que InkWell dentro del sheet funcione
-                child: Material(
-                  color: Colors.transparent,
-                  child: AddBillSheet(
-                    onSave: ({
-                      required monthId,
-                      required monthName,
-                      required type,
-                      required totalAmount,
-                      required ownerAmount,
-                      required splits,
-                    }) {
-                      widget.viewModel.addBill(
-                        monthId: monthId,
-                        monthName: monthName,
-                        type: type,
-                        totalAmount: totalAmount,
-                        ownerAmount: ownerAmount,
-                        splits: splits,
-                      );
-                      setState(() {
-                        _expandedGroups[monthId] = true;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-
+  void _showAddBill(BuildContext context) {
+    // skill: Navigator.push con MaterialPageRoute para pantallas completas
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AddBillScreen(
+          onSave: ({
+            required monthId,
+            required monthName,
+            required type,
+            required totalAmount,
+            required ownerAmount,
+            required splits,
+          }) {
+            widget.viewModel.addBill(
+              monthId:     monthId,
+              monthName:   monthName,
+              type:        type,
+              totalAmount: totalAmount,
+              ownerAmount: ownerAmount,
+              splits:      splits,
+            );
+            setState(() => _expandedGroups[monthId] = true);
+          },
+        ),
       ),
     );
   }
@@ -120,6 +70,18 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // FAB: acción principal de crear (según flutter-ui skill)
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showAddBill(context),
+        backgroundColor: AppColors.headerBg,
+        foregroundColor: Colors.white,
+        elevation: 3,
+        icon: const Icon(Icons.add),
+        label: const Text(
+          AppStrings.addBillButton,
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+        ),
+      ),
       body: ListenableBuilder(
         listenable: widget.viewModel,
         builder: (context, _) {
@@ -182,9 +144,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                     : widget.viewModel.groups.isEmpty
                         ? const Center(child: Text(AppStrings.noBillsFound))
                         : ListView.builder(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.md,
-                              vertical: AppSpacing.md,
+                            // Padding inferior para que el FAB no tape el último ítem
+                            padding: const EdgeInsets.only(
+                              left:   AppSpacing.md,
+                              right:  AppSpacing.md,
+                              top:    AppSpacing.md,
+                              bottom: 88, // altura FAB (56) + margen (32)
                             ),
                             itemCount: widget.viewModel.groups.length,
                             itemBuilder: (context, index) {
@@ -195,40 +160,6 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                           ),
               ),
 
-              // Bottom Button Bar – animado
-              Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: ScaleTransition(
-                  scale: _btnScale,
-                  child: FadeTransition(
-                    opacity: _btnOpacity,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton.icon(
-                        onPressed: () => _showAddBill(context),
-                        icon: const Icon(Icons.add, color: Colors.white),
-                        label: const Text(
-                          AppStrings.addBillButton,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.headerBg,
-                          foregroundColor: Colors.white,
-                          elevation: 2,
-                          shadowColor: AppColors.headerBg.withOpacity(0.4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppRadius.md),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ],
           );
         },
@@ -458,7 +389,7 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     final detailText = 'Yo: ${bill.ownerAmount.toStringAsFixed(1)} Bs\n$splitsDetail';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xs, vertical: AppSpacing.xs),
       decoration: const BoxDecoration(
         // Divisor coincide con el borde de la card (sin indent)
         border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0), width: 1)),
@@ -466,12 +397,18 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Toggle de pago
+          // Toggle de pago — skill: "Ensure 48×48 dp touch targets"
           GestureDetector(
             onTap: () => widget.viewModel.toggleBillPayment(groupId, bill.id),
-            child: _buildPaymentCircle(bill.isPaid, size: 20),
+            child: SizedBox(
+              width:  48,
+              height: 48,
+              child: Center(
+                child: _buildPaymentCircle(bill.isPaid, size: 26),
+              ),
+            ),
           ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.xs),
 
           // Nombre del servicio con ícono al mismo nivel + detalle abajo
           Expanded(
@@ -536,12 +473,12 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
                   ),
                 ),
 
-          // Botón eliminar compacto
+          // Botón eliminar — skill: "Ensure 48×48 dp touch targets"
           IconButton(
-            icon: Icon(Icons.delete_outline, size: 18, color: Colors.grey.shade400),
+            key: const Key('delete_bill_btn'),
+            icon: Icon(Icons.delete_outline, size: 20, color: Colors.grey.shade400),
             onPressed: () => _showDeleteConfirmation(groupId, bill.id),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           ),
         ],
       ),
@@ -590,3 +527,4 @@ class _HomeViewState extends State<HomeView> with SingleTickerProviderStateMixin
     );
   }
 }
+
