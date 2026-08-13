@@ -18,7 +18,8 @@ class ServiceBill {
     this.isPaid = false,
   });
 
-  double get totalSplitAssigned => splits.fold(0.0, (sum, item) => sum + item.assignedAmount);
+  double get totalSplitAssigned =>
+      splits.fold(0.0, (sum, item) => sum + item.assignedAmount);
 
   ServiceBill copyWith({
     String? id,

@@ -8,10 +8,11 @@ class AppStrings {
   static const String addBillButton = 'Agregar factura';
   static const String addBillTitle = 'Nueva factura';
   static const String noBillsFound = 'No hay facturas registradas.';
-  
+
   // Dialogs
   static const String deleteBillTitle = 'Eliminar factura';
-  static const String deleteBillConfirmMessage = '¿Estás seguro de que deseas eliminar este servicio de la lista?';
+  static const String deleteBillConfirmMessage =
+      '¿Estás seguro de que deseas eliminar este servicio de la lista?';
   static const String cancel = 'Cancelar';
   static const String delete = 'Eliminar';
   static const String save = 'Guardar';

@@ -33,14 +33,8 @@ ThemeData buildAppTheme() {
         color: AppColors.textPrimary,
         fontSize: 18,
       ),
-      bodyLarge: TextStyle(
-        color: AppColors.textPrimary,
-        fontSize: 16,
-      ),
-      bodyMedium: TextStyle(
-        color: AppColors.textSecondary,
-        fontSize: 14,
-      ),
+      bodyLarge: TextStyle(color: AppColors.textPrimary, fontSize: 16),
+      bodyMedium: TextStyle(color: AppColors.textSecondary, fontSize: 14),
     ),
   );
 }

@@ -11,11 +11,14 @@ class MonthlyGroup {
     required this.bills,
   });
 
-  double get totalAmount => bills.fold(0.0, (sum, bill) => sum + bill.totalAmount);
-  double get ownerTotal => bills.fold(0.0, (sum, bill) => sum + bill.ownerAmount);
-  
+  double get totalAmount =>
+      bills.fold(0.0, (sum, bill) => sum + bill.totalAmount);
+  double get ownerTotal =>
+      bills.fold(0.0, (sum, bill) => sum + bill.ownerAmount);
+
   // Total of all splits
-  double get tenantTotal => bills.fold(0.0, (sum, bill) => sum + bill.totalSplitAssigned);
+  double get tenantTotal =>
+      bills.fold(0.0, (sum, bill) => sum + bill.totalSplitAssigned);
 
   bool get isPaid => bills.isNotEmpty && bills.every((bill) => bill.isPaid);
 

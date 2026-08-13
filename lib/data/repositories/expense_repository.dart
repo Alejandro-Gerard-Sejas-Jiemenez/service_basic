@@ -20,8 +20,10 @@ class ExpenseRepository {
     }
 
     try {
-      final List<dynamic> decoded = jsonDecode(jsonStr);
-      return decoded.map((e) => MonthlyGroup.fromJson(e as Map<String, dynamic>)).toList();
+      final List<dynamic> decoded = jsonDecode(jsonStr) as List<dynamic>;
+      return decoded
+          .map((e) => MonthlyGroup.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       // Fallback in case of parse error
       return _generateMockData();
@@ -35,28 +37,36 @@ class ExpenseRepository {
   }
 
   List<MonthlyGroup> _generateMockData() {
-    return [
+    return const [
       MonthlyGroup(
         id: '2026-07',
         monthName: 'Julio 2026',
         bills: [
-          const ServiceBill(
+          ServiceBill(
             id: '2026-07-agua',
             type: ServiceType.water,
             totalAmount: 115.0,
             ownerAmount: 57.5,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 57.5, isPaid: false),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 57.5,
+                isPaid: false,
+              ),
             ],
             isPaid: false,
           ),
-          const ServiceBill(
+          ServiceBill(
             id: '2026-07-luz',
             type: ServiceType.electricity,
             totalAmount: 528.0,
             ownerAmount: 200.0,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 328.0, isPaid: false),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 328.0,
+                isPaid: false,
+              ),
             ],
             isPaid: false,
           ),
@@ -66,23 +76,31 @@ class ExpenseRepository {
         id: '2026-06',
         monthName: 'Junio 2026',
         bills: [
-          const ServiceBill(
+          ServiceBill(
             id: '2026-06-agua',
             type: ServiceType.water,
             totalAmount: 153.0,
             ownerAmount: 76.5,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 76.5, isPaid: false),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 76.5,
+                isPaid: false,
+              ),
             ],
             isPaid: false,
           ),
-          const ServiceBill(
+          ServiceBill(
             id: '2026-06-luz',
             type: ServiceType.electricity,
             totalAmount: 478.0,
             ownerAmount: 200.0,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 278.0, isPaid: false),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 278.0,
+                isPaid: false,
+              ),
             ],
             isPaid: false,
           ),
@@ -92,23 +110,33 @@ class ExpenseRepository {
         id: '2026-05',
         monthName: 'Mayo 2026',
         bills: [
-          const ServiceBill(
+          ServiceBill(
             id: '2026-05-agua',
             type: ServiceType.water,
             totalAmount: 125.0,
             ownerAmount: 62.5,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 62.5, isPaid: true, paidAmount: 62.5),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 62.5,
+                isPaid: true,
+                paidAmount: 62.5,
+              ),
             ],
             isPaid: true,
           ),
-          const ServiceBill(
+          ServiceBill(
             id: '2026-05-luz',
             type: ServiceType.electricity,
             totalAmount: 533.0,
             ownerAmount: 200.0,
             splits: [
-              NeighborSplit(name: 'Vecina', assignedAmount: 333.0, isPaid: true, paidAmount: 333.0),
+              NeighborSplit(
+                name: 'Vecina',
+                assignedAmount: 333.0,
+                isPaid: true,
+                paidAmount: 333.0,
+              ),
             ],
             isPaid: true,
           ),

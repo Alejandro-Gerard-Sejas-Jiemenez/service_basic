@@ -8,13 +8,13 @@ import 'ui/features/home/views/home_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize spanish date formatting symbols
   await initializeDateFormatting('es', null);
-  
+
   final repository = ExpenseRepository();
   final viewModel = ExpenseViewModel(repository: repository);
-  
+
   runApp(MyApp(viewModel: viewModel));
 }
 

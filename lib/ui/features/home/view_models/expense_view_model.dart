@@ -8,7 +8,8 @@ import '../../../../domain/models/monthly_group.dart';
 class ExpenseViewModel extends ChangeNotifier {
   final ExpenseRepository _repository;
 
-  ExpenseViewModel({required ExpenseRepository repository}) : _repository = repository;
+  ExpenseViewModel({required ExpenseRepository repository})
+    : _repository = repository;
 
   List<MonthlyGroup> _groups = [];
   List<MonthlyGroup> get groups => _groups;
@@ -21,10 +22,10 @@ class ExpenseViewModel extends ChangeNotifier {
     notifyListeners();
 
     _groups = await _repository.loadMonthlyGroups();
-    
+
     // Sort groups by ID descending (latest month first)
     _groups.sort((a, b) => b.id.compareTo(a.id));
-    
+
     _isLoading = false;
     notifyListeners();
   }
@@ -52,7 +53,8 @@ class ExpenseViewModel extends ChangeNotifier {
     if (groupIndex != -1) {
       final existingGroup = _groups[groupIndex];
       // Check if service already exists in this month to avoid duplicates (optional, or just add it)
-      final updatedBills = List<ServiceBill>.from(existingGroup.bills)..add(newBill);
+      final updatedBills = List<ServiceBill>.from(existingGroup.bills)
+        ..add(newBill);
       _groups[groupIndex] = existingGroup.copyWith(bills: updatedBills);
     } else {
       final newGroup = MonthlyGroup(
@@ -100,7 +102,11 @@ class ExpenseViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleNeighborPayment(String groupId, String billId, String neighborName) async {
+  Future<void> toggleNeighborPayment(
+    String groupId,
+    String billId,
+    String neighborName,
+  ) async {
     final groupIndex = _groups.indexWhere((g) => g.id == groupId);
     if (groupIndex == -1) return;
 
@@ -123,10 +129,7 @@ class ExpenseViewModel extends ChangeNotifier {
     // Bill is fully paid if all splits are paid
     final allPaid = updatedSplits.every((s) => s.isPaid);
 
-    final updatedBill = bill.copyWith(
-      splits: updatedSplits,
-      isPaid: allPaid,
-    );
+    final updatedBill = bill.copyWith(splits: updatedSplits, isPaid: allPaid);
 
     final updatedBills = List<ServiceBill>.from(group.bills);
     updatedBills[billIndex] = updatedBill;
@@ -141,7 +144,8 @@ class ExpenseViewModel extends ChangeNotifier {
     if (groupIndex == -1) return;
 
     final group = _groups[groupIndex];
-    final updatedBills = List<ServiceBill>.from(group.bills)..removeWhere((b) => b.id == billId);
+    final updatedBills = List<ServiceBill>.from(group.bills)
+      ..removeWhere((b) => b.id == billId);
 
     if (updatedBills.isEmpty) {
       _groups.removeAt(groupIndex);
