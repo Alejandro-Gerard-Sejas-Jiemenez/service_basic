@@ -104,11 +104,20 @@ Cada cambio al proyecto DEBE seguir estas 4 fases en orden:
 - Correr `dart analyze <archivo>` después de cada cambio
 - Hacer hot reload (`r`) o hot restart (`R`) para verificar en dispositivo
 
-### Fase 4: PRUEBA
-- Verificar con `dart analyze` que no hay errores
-- Correr `flutter test` si hay tests afectados
-- Confirmar hot reload exitoso
-- Registrar resultado en `AUDIT_LOG.md`
+### Fase 4: PRUEBA Y CIERRE
+- Verificar con `dart analyze` que no hay errores (0 issues)
+- Correr `flutter test` verificando que todos los tests pasen al 100%
+- Confirmar hot reload exitoso en dispositivo si aplica
+- Registrar resultado detallado en `AUDIT_LOG.md` y actualizar `FILE_INDEX.md`
+- **Git Commit & Push (Obligatorio tras aprobación y tests exitosos):**
+  - Ejecutar `git add .`
+  - Crear commit siguiendo **Conventional Commits**:
+    - Formato: `<tipo>[scope]: <descripción>`
+    - Tipos: `feat:`, `fix:`, `refactor:`, `test:`, `style:`, `docs:`, `perf:`, `chore:`
+    - Verbo imperativo en presente (ej. `add`, `fix`, `refactor`, `remove`)
+    - Máximo **50 caracteres** en el título
+    - ❌ Sin punto final ni puntos suspensivos
+  - Ejecutar `git push origin <rama_actual>` para sincronizar de inmediato
 
 ---
 
