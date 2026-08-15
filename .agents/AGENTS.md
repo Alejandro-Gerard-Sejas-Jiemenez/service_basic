@@ -214,10 +214,16 @@ Usa estos marcadores en tus peticiones para orientar al agente:
 | B3 | análisis | `dart fix --apply` + `dart format .` | dart-run-static-analysis | ✅ |
 | C1 | pattern | Convertir switch de ServiceType a switch expression | dart-use-pattern-matching | ✅ |
 | C2 | pattern | Revisar otros switch en `home_view.dart` | dart-use-pattern-matching | ✅ |
-| D1 | modelos | Migrar `NeighborSplit` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req) |
-| D2 | modelos | Migrar `ServiceBill` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req) |
-| D3 | modelos | Migrar `MonthlyGroup` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req) |
+| D1 | modelos | Migrar `NeighborSplit` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req - No recomendado forzar) |
+| D2 | modelos | Migrar `ServiceBill` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req - No recomendado forzar) |
+| D3 | modelos | Migrar `MonthlyGroup` a primary constructor | dart-use-primary-constructors | ❌ (Dart ≥3.13 req - No recomendado forzar) |
 | E1 | tests | Tests de `ExpenseViewModel` | dart-add-unit-test | ✅ |
 | E2 | tests | Tests de `ExpenseRepository` | dart-add-unit-test | ✅ |
+| E3 | tests | Tests de `AddBillViewModel` | dart-add-unit-test | ✅ |
+| F1 | feature | Editar facturas existentes (montos, servicio, vecinos) | flutter-ui | ⏳ |
+| F2 | feature | Compartir resumen de deuda por WhatsApp / Portapapeles | flutter-ui | ⏳ |
+| F3 | feature | Filtros por tipo de servicio y estado de pago en HomeView | flutter-ui | ⏳ |
+| F4 | tests | Tests visuales de widgets con WidgetTester | flutter-add-widget-test | ⏳ |
+| F5 | feature | Métricas y gráficos de gastos acumulados | flutter-ui | ⏳ |
 
-**Leyenda:** ⏳ Pendiente | 🔄 En progreso | ✅ Completado | ❌ Cancelado
+**Leyenda:** ⏳ Pendiente | 🔄 En progreso | ✅ Completado | ❌ Cancelado / No recomendado
