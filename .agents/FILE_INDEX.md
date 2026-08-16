@@ -64,6 +64,7 @@ basic_service/
 │                       ├── add_bill_bottom_bar.dart  ← AddBillBottomBar (barra de Guardar y Cancelar) ✅
 │                       ├── bill_item.dart            ← BillItem (ítem de factura con switch expression) ✅
 │                       ├── delete_bill_dialog.dart   ← DeleteBillDialog (modal de confirmación) ✅
+│                       ├── home_filters_bar.dart     ← HomeFiltersBar (chips de filtrado por servicio/estado) ✅
 │                       ├── home_header.dart          ← HomeHeader (header degradado) ✅
 │                       ├── month_year_picker.dart    ← MonthYearPicker (selector de mes/año) ✅
 │                       ├── monthly_group_card.dart   ← MonthlyGroupCard (tarjeta de grupo mensual) ✅
@@ -123,6 +124,7 @@ basic_service/
 | 2026-08-13 | CREADO | `add_bill_bottom_bar.dart` | Modularización | Barra de acciones inferior reutilizable (48dp touch targets) |
 | 2026-08-16 | MODIFICADO | `varios archivos` | F1 | Edición completa de facturas existentes (VM, Screen, Items, Tests) |
 | 2026-08-16 | CREADO | `bill_share_formatter.dart` & tests | F2 | Compartir resumen de deuda formateado para WhatsApp y Portapapeles |
+| 2026-08-16 | CREADO | `home_filters_bar.dart` & tests | F3 | Barra de filtros por servicio y estado de pago en HomeView |
 
 ---
 

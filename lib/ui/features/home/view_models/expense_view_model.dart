@@ -5,6 +5,8 @@ import '../../../../domain/models/neighbor_split.dart';
 import '../../../../domain/models/service_bill.dart';
 import '../../../../domain/models/monthly_group.dart';
 
+enum PaymentStatusFilter { all, pending, paid }
+
 class ExpenseViewModel extends ChangeNotifier {
   final ExpenseRepository _repository;
 
@@ -16,6 +18,67 @@ class ExpenseViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  ServiceType? _selectedServiceFilter;
+  ServiceType? get selectedServiceFilter => _selectedServiceFilter;
+
+  PaymentStatusFilter _paymentStatusFilter = PaymentStatusFilter.all;
+  PaymentStatusFilter get paymentStatusFilter => _paymentStatusFilter;
+
+  bool get hasActiveFilters =>
+      _selectedServiceFilter != null ||
+      _paymentStatusFilter != PaymentStatusFilter.all;
+
+  void setServiceFilter(ServiceType? type) {
+    if (_selectedServiceFilter != type) {
+      _selectedServiceFilter = type;
+      notifyListeners();
+    }
+  }
+
+  void setPaymentStatusFilter(PaymentStatusFilter filter) {
+    if (_paymentStatusFilter != filter) {
+      _paymentStatusFilter = filter;
+      notifyListeners();
+    }
+  }
+
+  void clearFilters() {
+    if (hasActiveFilters) {
+      _selectedServiceFilter = null;
+      _paymentStatusFilter = PaymentStatusFilter.all;
+      notifyListeners();
+    }
+  }
+
+  List<MonthlyGroup> get filteredGroups {
+    if (!hasActiveFilters) return _groups;
+
+    final result = <MonthlyGroup>[];
+
+    for (final group in _groups) {
+      final matchingBills = group.bills.where((bill) {
+        if (_selectedServiceFilter != null &&
+            bill.type != _selectedServiceFilter) {
+          return false;
+        }
+        if (_paymentStatusFilter == PaymentStatusFilter.paid && !bill.isPaid) {
+          return false;
+        }
+        if (_paymentStatusFilter == PaymentStatusFilter.pending &&
+            bill.isPaid) {
+          return false;
+        }
+        return true;
+      }).toList();
+
+      if (matchingBills.isNotEmpty) {
+        result.add(group.copyWith(bills: matchingBills));
+      }
+    }
+
+    return result;
+  }
 
   Future<void> loadExpenses() async {
     _isLoading = true;

@@ -11,6 +11,7 @@ import '../view_models/expense_view_model.dart';
 import 'add_bill_screen.dart';
 import 'widgets/bill_item.dart';
 import 'widgets/delete_bill_dialog.dart';
+import 'widgets/home_filters_bar.dart';
 import 'widgets/home_header.dart';
 import 'widgets/monthly_group_card.dart';
 
@@ -157,25 +158,51 @@ class _HomeViewState extends State<HomeView> {
       body: ListenableBuilder(
         listenable: widget.viewModel,
         builder: (context, _) {
+          final displayedGroups = widget.viewModel.filteredGroups;
+
           return Column(
             children: [
               const HomeHeader(),
+              HomeFiltersBar(
+                selectedService: widget.viewModel.selectedServiceFilter,
+                selectedStatus: widget.viewModel.paymentStatusFilter,
+                hasActiveFilters: widget.viewModel.hasActiveFilters,
+                onServiceChanged: widget.viewModel.setServiceFilter,
+                onStatusChanged: widget.viewModel.setPaymentStatusFilter,
+                onClear: widget.viewModel.clearFilters,
+              ),
               Expanded(
                 child: widget.viewModel.isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : widget.viewModel.groups.isEmpty
-                    ? const Center(child: Text(AppStrings.noBillsFound))
+                    : displayedGroups.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppSpacing.lg),
+                          child: Text(
+                            widget.viewModel.hasActiveFilters
+                                ? AppStrings.noFilteredBillsFound
+                                : AppStrings.noBillsFound,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.only(
                           left: AppSpacing.md,
                           right: AppSpacing.md,
-                          top: AppSpacing.md,
+                          top: AppSpacing.xs,
                           bottom: 88,
                         ),
-                        itemCount: widget.viewModel.groups.length,
+                        itemCount: displayedGroups.length,
                         itemBuilder: (context, index) {
-                          final group = widget.viewModel.groups[index];
-                          final isExpanded = _expandedGroups[group.id] ?? false;
+                          final group = displayedGroups[index];
+                          final isExpanded =
+                              _expandedGroups[group.id] ??
+                              widget.viewModel.hasActiveFilters;
 
                           return MonthlyGroupCard(
                             key: Key('month_card_${group.id}'),

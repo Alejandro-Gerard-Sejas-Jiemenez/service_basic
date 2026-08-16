@@ -222,7 +222,7 @@ Usa estos marcadores en tus peticiones para orientar al agente:
 | E3 | tests | Tests de `AddBillViewModel` | dart-add-unit-test | ✅ |
 | F1 | feature | Editar facturas existentes (montos, servicio, vecinos) | flutter-ui | ✅ |
 | F2 | feature | Compartir resumen de deuda por WhatsApp / Portapapeles | flutter-ui | ✅ |
-| F3 | feature | Filtros por tipo de servicio y estado de pago en HomeView | flutter-ui | ⏳ |
+| F3 | feature | Filtros por tipo de servicio y estado de pago en HomeView | flutter-ui | ✅ |
 | F4 | tests | Tests visuales de widgets con WidgetTester | flutter-add-widget-test | ⏳ |
 | F5 | feature | Métricas y gráficos de gastos acumulados | flutter-ui | ⏳ |
 

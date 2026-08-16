@@ -416,4 +416,91 @@ void main() {
       },
     );
   });
+
+  group('ExpenseViewModel - Filters & filteredGroups', () {
+    setUp(() async {
+      repository.inMemoryData = [
+        const MonthlyGroup(
+          id: '2026-08',
+          monthName: 'Agosto 2026',
+          bills: [
+            ServiceBill(
+              id: 'bill-1',
+              type: ServiceType.water,
+              totalAmount: 100.0,
+              ownerAmount: 50.0,
+              splits: [],
+              isPaid: true,
+            ),
+            ServiceBill(
+              id: 'bill-2',
+              type: ServiceType.electricity,
+              totalAmount: 300.0,
+              ownerAmount: 150.0,
+              splits: [],
+              isPaid: false,
+            ),
+          ],
+        ),
+      ];
+      await viewModel.loadExpenses();
+    });
+
+    test('returns all groups when no filter is active', () {
+      expect(viewModel.hasActiveFilters, isFalse);
+      expect(viewModel.filteredGroups.length, 1);
+      expect(viewModel.filteredGroups.first.bills.length, 2);
+    });
+
+    test('filters bills by ServiceType accurately', () {
+      viewModel.setServiceFilter(ServiceType.electricity);
+      expect(viewModel.hasActiveFilters, isTrue);
+      expect(viewModel.filteredGroups.length, 1);
+      expect(viewModel.filteredGroups.first.bills.length, 1);
+      expect(
+        viewModel.filteredGroups.first.bills.first.type,
+        ServiceType.electricity,
+      );
+
+      viewModel.setServiceFilter(ServiceType.gas);
+      expect(viewModel.filteredGroups, isEmpty);
+    });
+
+    test('filters bills by payment status accurately', () {
+      viewModel.setPaymentStatusFilter(PaymentStatusFilter.paid);
+      expect(viewModel.filteredGroups.first.bills.length, 1);
+      expect(
+        viewModel.filteredGroups.first.bills.first.type,
+        ServiceType.water,
+      );
+
+      viewModel.setPaymentStatusFilter(PaymentStatusFilter.pending);
+      expect(viewModel.filteredGroups.first.bills.length, 1);
+      expect(
+        viewModel.filteredGroups.first.bills.first.type,
+        ServiceType.electricity,
+      );
+    });
+
+    test('combines service and payment filters', () {
+      viewModel.setServiceFilter(ServiceType.water);
+      viewModel.setPaymentStatusFilter(PaymentStatusFilter.pending);
+      expect(viewModel.filteredGroups, isEmpty);
+
+      viewModel.setPaymentStatusFilter(PaymentStatusFilter.paid);
+      expect(viewModel.filteredGroups.first.bills.length, 1);
+    });
+
+    test('clearFilters resets all filter state', () {
+      viewModel.setServiceFilter(ServiceType.water);
+      viewModel.setPaymentStatusFilter(PaymentStatusFilter.paid);
+      expect(viewModel.hasActiveFilters, isTrue);
+
+      viewModel.clearFilters();
+      expect(viewModel.hasActiveFilters, isFalse);
+      expect(viewModel.selectedServiceFilter, isNull);
+      expect(viewModel.paymentStatusFilter, PaymentStatusFilter.all);
+      expect(viewModel.filteredGroups.first.bills.length, 2);
+    });
+  });
 }

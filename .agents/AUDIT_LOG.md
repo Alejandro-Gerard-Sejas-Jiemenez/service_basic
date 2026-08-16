@@ -413,4 +413,21 @@
 
 ---
 
+### [2026-08-16 15:00] Sesión 27 — Tarea F3: Filtros por Servicio y Estado de Pago en HomeView
+
+**Tarea:** Implementación de filtrado reactivo de facturas por tipo de servicio y estado de pago con chips interactivos
+**Skill aplicada:** flutter-ui, flutter-apply-architecture-best-practices & dart-add-unit-test
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos creados:**
+- `lib/ui/features/home/views/widgets/home_filters_bar.dart` (CREADO) — Barra horizontal de chips interactivos con touch targets de 48dp y semántica de accesibilidad.
+**Archivos modificados:**
+- `lib/ui/core/sizes.dart` — Añadido `AppRadius.full = 999.0` para chips redondeados.
+- `lib/ui/core/strings.dart` — Strings de filtros y mensaje de lista filtrada vacía.
+- `lib/ui/features/home/view_models/expense_view_model.dart` — `PaymentStatusFilter`, `selectedServiceFilter`, `paymentStatusFilter`, `clearFilters()` y getter computado reactivo `filteredGroups`.
+- `lib/ui/features/home/views/home_view.dart` — Integración de `HomeFiltersBar` y visualización de `filteredGroups`.
+- `test/ui/features/home/view_models/expense_view_model_test.dart` — 5 nuevos tests unitarios probando filtrado por servicio, estado, combinaciones y reseteo.
+**Resultado:** ✅ Exitoso — **31/31 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

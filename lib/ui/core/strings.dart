@@ -9,6 +9,12 @@ class AppStrings {
   static const String addBillTitle = 'Nueva factura';
   static const String editBillTitle = 'Editar factura';
   static const String noBillsFound = 'No hay facturas registradas.';
+  static const String noFilteredBillsFound =
+      'No hay facturas que coincidan con los filtros.';
+  static const String filterAll = 'Todos';
+  static const String filterPending = 'Pendientes';
+  static const String filterPaid = 'Pagados';
+  static const String clearFilters = 'Limpiar';
 
   // Dialogs & Actions
   static const String deleteBillTitle = 'Eliminar factura';
