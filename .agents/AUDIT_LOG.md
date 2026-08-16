@@ -430,4 +430,17 @@
 
 ---
 
+### [2026-08-16 15:06] Sesión 28 — Tarea F4: Tests Visuales de Widgets con WidgetTester
+
+**Tarea:** Implementación de suite de pruebas de widgets a nivel de componente con `WidgetTester`
+**Skill aplicada:** flutter-add-widget-test & dart-add-unit-test
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos creados:**
+- `test/ui/features/home/views/widgets/monthly_group_card_test.dart` (CREADO) — Verificación de renderizado de cabecera, desglose, expansión e interacción de toggle/share.
+- `test/ui/features/home/views/widgets/bill_item_test.dart` (CREADO) — Verificación de presentación de servicio, toggle de pago, edición y eliminación.
+- `test/ui/features/home/views/widgets/home_filters_bar_test.dart` (CREADO) — Verificación de chips de filtro, scroll horizontal e interacciones.
+**Resultado:** ✅ Exitoso — **35/35 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

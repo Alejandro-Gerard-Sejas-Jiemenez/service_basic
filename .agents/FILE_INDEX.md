@@ -80,9 +80,14 @@ basic_service/
 │   │       └── home/
 │   │           ├── services/
 │   │           │   └── bill_share_formatter_test.dart ← Tests unitarios de BillShareFormatter ✅
-│   │           └── view_models/
-│   │               ├── expense_view_model_test.dart  ← Tests unitarios de ExpenseViewModel ✅
-│   │               └── add_bill_view_model_test.dart ← Tests unitarios de AddBillViewModel ✅
+│   │           ├── view_models/
+│   │           │   ├── expense_view_model_test.dart  ← Tests unitarios de ExpenseViewModel ✅
+│   │           │   └── add_bill_view_model_test.dart ← Tests unitarios de AddBillViewModel ✅
+│   │           └── views/
+│   │               └── widgets/
+│   │                   ├── bill_item_test.dart            ← Tests de widget de BillItem ✅
+│   │                   ├── home_filters_bar_test.dart     ← Tests de widget de HomeFiltersBar ✅
+│   │                   └── monthly_group_card_test.dart   ← Tests de widget de MonthlyGroupCard ✅
 │   └── widget_test.dart       ← Tests de UI / integración (smoke tests) ✅
 │
 ├── analysis_options.yaml      ← Configuración del analizador Dart
@@ -125,6 +130,17 @@ basic_service/
 | 2026-08-16 | MODIFICADO | `varios archivos` | F1 | Edición completa de facturas existentes (VM, Screen, Items, Tests) |
 | 2026-08-16 | CREADO | `bill_share_formatter.dart` & tests | F2 | Compartir resumen de deuda formateado para WhatsApp y Portapapeles |
 | 2026-08-16 | CREADO | `home_filters_bar.dart` & tests | F3 | Barra de filtros por servicio y estado de pago en HomeView |
+| 2026-08-16 | CREADO | `test/.../widgets/*_test.dart` | F4 | Suite de tests visuales y de interacción con WidgetTester |
+
+---
+
+## Estado de Deuda Técnica por Archivo
+
+| Archivo | Deuda | Tarea pendiente |
+|---|---|---|
+| `neighbor_split.dart` | Constructor verboso | D1 (Bloqueado: Dart SDK ≥ 3.13) |
+| `service_bill.dart` | Constructor verboso | D2 (Bloqueado: Dart SDK ≥ 3.13) |
+| `monthly_group.dart` | Constructor verboso | D3 (Bloqueado: Dart SDK ≥ 3.13) |
 
 ---
 
