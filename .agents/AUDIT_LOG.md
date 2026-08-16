@@ -461,4 +461,15 @@
 
 ---
 
+### [2026-08-16 15:15] Sesión 30 — Corrección de Layout Overflow en MetricsScreen
+
+**Tarea:** Corrección de overflow horizontal (9.7px) en la tarjeta de Estado de Gastos y KPIs principales
+**Skill aplicada:** flutter-ui & flutter-fix-layout-issues
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/metrics_screen.dart` — Uso de `Expanded` en las filas de Estado de Gastos y KPIs para evitar overflows en cualquier resolución de pantalla.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

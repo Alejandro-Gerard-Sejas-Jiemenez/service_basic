@@ -111,19 +111,23 @@ class MetricsScreen extends StatelessWidget {
                         ),
                         const Divider(color: Color(0x30FFFFFF), height: 24),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            _buildKpiMini(
-                              label: AppStrings.myTotal,
-                              value:
-                                  '${viewModel.allTimeOwnerTotal.toStringAsFixed(1)} Bs',
-                              color: const Color(0xFF6EE7B7),
+                            Expanded(
+                              child: _buildKpiMini(
+                                label: AppStrings.myTotal,
+                                value:
+                                    '${viewModel.allTimeOwnerTotal.toStringAsFixed(1)} Bs',
+                                color: const Color(0xFF6EE7B7),
+                              ),
                             ),
-                            _buildKpiMini(
-                              label: AppStrings.tenantTotal,
-                              value:
-                                  '${viewModel.allTimeTenantTotal.toStringAsFixed(1)} Bs',
-                              color: const Color(0xFF93C5FD),
+                            const SizedBox(width: AppSpacing.xs),
+                            Expanded(
+                              child: _buildKpiMini(
+                                label: AppStrings.tenantTotal,
+                                value:
+                                    '${viewModel.allTimeTenantTotal.toStringAsFixed(1)} Bs',
+                                color: const Color(0xFF93C5FD),
+                              ),
                             ),
                           ],
                         ),
@@ -188,22 +192,27 @@ class MetricsScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '✅ Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: AppColors.textSecondary,
-                                fontWeight: FontWeight.w500,
+                            Expanded(
+                              child: Text(
+                                '✅ Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                            Text(
-                              '⏳ Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Color(0xFFEF4444),
-                                fontWeight: FontWeight.w600,
+                            const SizedBox(width: AppSpacing.xs),
+                            Expanded(
+                              child: Text(
+                                '⏳ Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFFEF4444),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ],
