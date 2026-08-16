@@ -28,11 +28,11 @@ class HomeFiltersBar extends StatelessWidget {
     required this.onClear,
   });
 
-  static String _serviceIcon(ServiceType type) => switch (type) {
-    ServiceType.electricity => '💡',
-    ServiceType.water => '💧',
-    ServiceType.gas => '🔥',
-    ServiceType.internet => '📶',
+  static (Color, IconData) _serviceMeta(ServiceType type) => switch (type) {
+    ServiceType.water => (AppColors.water, Icons.water_drop),
+    ServiceType.electricity => (AppColors.electricity, Icons.flash_on),
+    ServiceType.gas => (AppColors.gas, Icons.local_fire_department),
+    ServiceType.internet => (AppColors.internet, Icons.wifi),
   };
 
   Widget _buildFilterChip({
@@ -40,6 +40,8 @@ class HomeFiltersBar extends StatelessWidget {
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
+    IconData? icon,
+    Color? iconColor,
   }) {
     return Padding(
       padding: const EdgeInsets.only(right: AppSpacing.xs),
@@ -73,15 +75,28 @@ class HomeFiltersBar extends StatelessWidget {
                     ]
                   : null,
             ),
-            child: Center(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(
+                    icon,
+                    size: 14,
+                    color: isSelected
+                        ? Colors.white
+                        : (iconColor ?? AppColors.textPrimary),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                    color: isSelected ? Colors.white : AppColors.textPrimary,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -110,13 +125,17 @@ class HomeFiltersBar extends StatelessWidget {
             ),
             _buildFilterChip(
               key: const Key('filter_status_pending'),
-              label: '⏳ ${AppStrings.filterPending}',
+              label: AppStrings.filterPending,
+              icon: Icons.hourglass_empty_rounded,
+              iconColor: const Color(0xFFF59E0B),
               isSelected: selectedStatus == PaymentStatusFilter.pending,
               onTap: () => onStatusChanged(PaymentStatusFilter.pending),
             ),
             _buildFilterChip(
               key: const Key('filter_status_paid'),
-              label: '✅ ${AppStrings.filterPaid}',
+              label: AppStrings.filterPaid,
+              icon: Icons.check_circle_outline_rounded,
+              iconColor: const Color(0xFF10B981),
               isSelected: selectedStatus == PaymentStatusFilter.paid,
               onTap: () => onStatusChanged(PaymentStatusFilter.paid),
             ),
@@ -132,9 +151,12 @@ class HomeFiltersBar extends StatelessWidget {
             // Tipos de servicio
             ...ServiceType.values.map((type) {
               final isSelected = selectedService == type;
+              final (color, icon) = _serviceMeta(type);
               return _buildFilterChip(
                 key: Key('filter_service_${type.name}'),
-                label: '${_serviceIcon(type)} ${type.displayName}',
+                label: type.displayName,
+                icon: icon,
+                iconColor: color,
                 isSelected: isSelected,
                 onTap: () => onServiceChanged(isSelected ? null : type),
               );

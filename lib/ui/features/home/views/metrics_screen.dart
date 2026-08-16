@@ -14,18 +14,11 @@ class MetricsScreen extends StatelessWidget {
 
   const MetricsScreen({super.key, required this.viewModel});
 
-  static Color _serviceColor(ServiceType type) => switch (type) {
-    ServiceType.electricity => const Color(0xFFF59E0B),
-    ServiceType.water => const Color(0xFF3B82F6),
-    ServiceType.gas => const Color(0xFFEF4444),
-    ServiceType.internet => const Color(0xFF8B5CF6),
-  };
-
-  static String _serviceIcon(ServiceType type) => switch (type) {
-    ServiceType.electricity => '💡',
-    ServiceType.water => '💧',
-    ServiceType.gas => '🔥',
-    ServiceType.internet => '📶',
+  static (Color, IconData) _serviceMeta(ServiceType type) => switch (type) {
+    ServiceType.water => (AppColors.water, Icons.water_drop),
+    ServiceType.electricity => (AppColors.electricity, Icons.flash_on),
+    ServiceType.gas => (AppColors.gas, Icons.local_fire_department),
+    ServiceType.internet => (AppColors.internet, Icons.wifi),
   };
 
   @override
@@ -194,25 +187,52 @@ class MetricsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                '✅ Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: AppColors.textSecondary,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 15,
+                                    color: Color(0xFF10B981),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      'Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: AppColors.textSecondary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(width: AppSpacing.xs),
                             Expanded(
-                              child: Text(
-                                '⏳ Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFFEF4444),
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const Icon(
+                                    Icons.hourglass_top_rounded,
+                                    size: 15,
+                                    color: Color(0xFFEF4444),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: Text(
+                                      'Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Color(0xFFEF4444),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -320,7 +340,7 @@ class MetricsScreen extends StatelessWidget {
                           final pct = viewModel.allTimeTotal == 0.0
                               ? 0.0
                               : (amount / viewModel.allTimeTotal);
-                          final color = _serviceColor(type);
+                          final (color, icon) = _serviceMeta(type);
 
                           return Padding(
                             padding: const EdgeInsets.only(
@@ -330,15 +350,26 @@ class MetricsScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      '${_serviceIcon(type)} ${type.displayName}',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        color: AppColors.textPrimary,
+                                    Container(
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        color: color.withValues(alpha: 0.12),
+                                        borderRadius: BorderRadius.circular(
+                                          AppRadius.sm,
+                                        ),
+                                      ),
+                                      child: Icon(icon, size: 14, color: color),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        type.displayName,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.textPrimary,
+                                        ),
                                       ),
                                     ),
                                     Text(
