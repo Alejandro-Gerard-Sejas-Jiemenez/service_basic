@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:basic_service/domain/models/monthly_group.dart';
 import 'package:basic_service/domain/models/service_bill.dart';
 import 'package:basic_service/ui/core/colors.dart';
 import 'package:basic_service/ui/core/sizes.dart';
 import 'package:basic_service/ui/core/strings.dart';
+import '../services/bill_share_formatter.dart';
 import '../view_models/add_bill_view_model.dart';
 import '../view_models/expense_view_model.dart';
 import 'add_bill_screen.dart';
@@ -68,6 +71,22 @@ class _HomeViewState extends State<HomeView> {
     DeleteBillDialog.show(
       context,
       onConfirm: () => widget.viewModel.deleteBill(groupId, billId),
+    );
+  }
+
+  void _shareMonthlyGroup(BuildContext context, MonthlyGroup group) {
+    final text = BillShareFormatter.formatGroupSummary(group);
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(AppStrings.summaryCopied),
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+      ),
     );
   }
 
@@ -165,6 +184,7 @@ class _HomeViewState extends State<HomeView> {
                             onToggle: () => setState(
                               () => _expandedGroups[group.id] = !isExpanded,
                             ),
+                            onShare: () => _shareMonthlyGroup(context, group),
                             billItemBuilder: (groupId, bill) => BillItem(
                               key: Key('bill_item_${bill.id}'),
                               bill: bill,

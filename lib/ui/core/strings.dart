@@ -10,13 +10,15 @@ class AppStrings {
   static const String editBillTitle = 'Editar factura';
   static const String noBillsFound = 'No hay facturas registradas.';
 
-  // Dialogs
+  // Dialogs & Actions
   static const String deleteBillTitle = 'Eliminar factura';
   static const String deleteBillConfirmMessage =
       '¿Estás seguro de que deseas eliminar este servicio de la lista?';
   static const String cancel = 'Cancelar';
   static const String delete = 'Eliminar';
   static const String save = 'Guardar';
+  static const String shareSummary = 'Compartir resumen';
+  static const String summaryCopied = '¡Resumen copiado al portapapeles!';
 
   // Form Labels
   static const String labelService = 'SERVICIO';

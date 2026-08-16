@@ -52,6 +52,8 @@ basic_service/
 │       │
 │       └── features/
 │           └── home/
+│               ├── services/
+│               │   └── bill_share_formatter.dart ← Formateador de resúmenes para WhatsApp/Portapapeles ✅
 │               ├── view_models/
 │               │   ├── expense_view_model.dart   ← ViewModel principal (ChangeNotifier)
 │               │   └── add_bill_view_model.dart  ← ViewModel del formulario AddBill (ChangeNotifier) ✅
@@ -75,6 +77,8 @@ basic_service/
 │   ├── ui/
 │   │   └── features/
 │   │       └── home/
+│   │           ├── services/
+│   │           │   └── bill_share_formatter_test.dart ← Tests unitarios de BillShareFormatter ✅
 │   │           └── view_models/
 │   │               ├── expense_view_model_test.dart  ← Tests unitarios de ExpenseViewModel ✅
 │   │               └── add_bill_view_model_test.dart ← Tests unitarios de AddBillViewModel ✅
@@ -118,6 +122,7 @@ basic_service/
 | 2026-08-13 | CREADO | `add_bill_view_model_test.dart` | MVVM Refactor | Suite de 5 tests unitarios para AddBillViewModel |
 | 2026-08-13 | CREADO | `add_bill_bottom_bar.dart` | Modularización | Barra de acciones inferior reutilizable (48dp touch targets) |
 | 2026-08-16 | MODIFICADO | `varios archivos` | F1 | Edición completa de facturas existentes (VM, Screen, Items, Tests) |
+| 2026-08-16 | CREADO | `bill_share_formatter.dart` & tests | F2 | Compartir resumen de deuda formateado para WhatsApp y Portapapeles |
 
 ---
 

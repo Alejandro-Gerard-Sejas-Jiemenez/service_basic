@@ -13,6 +13,7 @@ class MonthlyGroupCard extends StatelessWidget {
   final MonthlyGroup group;
   final bool isExpanded;
   final VoidCallback onToggle;
+  final VoidCallback onShare;
   final Widget Function(String groupId, ServiceBill bill) billItemBuilder;
 
   const MonthlyGroupCard({
@@ -20,6 +21,7 @@ class MonthlyGroupCard extends StatelessWidget {
     required this.group,
     required this.isExpanded,
     required this.onToggle,
+    required this.onShare,
     required this.billItemBuilder,
   });
 
@@ -137,6 +139,26 @@ class MonthlyGroupCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: AppSpacing.xs),
+                    Semantics(
+                      button: true,
+                      label: 'Compartir resumen de ${group.monthName}',
+                      child: IconButton(
+                        key: Key('share_month_${group.id}'),
+                        tooltip: 'Compartir resumen',
+                        icon: Icon(
+                          Icons.share_outlined,
+                          size: 18,
+                          color: isExpanded
+                              ? _monthSubTextExp
+                              : AppColors.textSecondary,
+                        ),
+                        onPressed: onShare,
+                        constraints: const BoxConstraints(
+                          minWidth: 40,
+                          minHeight: 40,
+                        ),
+                      ),
+                    ),
                     Icon(
                       isExpanded
                           ? Icons.keyboard_arrow_up

@@ -397,4 +397,20 @@
 
 ---
 
+### [2026-08-16 14:53] Sesión 26 — Tarea F2: Compartir Resumen por WhatsApp / Portapapeles
+
+**Tarea:** Generación de resumen formateado con emojis y desglose por vecino, copiado al portapapeles y feedback visual
+**Skill aplicada:** flutter-ui, flutter-apply-architecture-best-practices & dart-add-unit-test
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos creados:**
+- `lib/ui/features/home/services/bill_share_formatter.dart` (CREADO) — Servicio formateador de resúmenes mensuales para WhatsApp.
+- `test/ui/features/home/services/bill_share_formatter_test.dart` (CREADO) — Tests unitarios para el formateador de resúmenes.
+**Archivos modificados:**
+- `lib/ui/core/strings.dart` — Textos de acción y confirmación de copiado.
+- `lib/ui/features/home/views/widgets/monthly_group_card.dart` — Añadido botón accesible de compartir con touch target de 48dp (`Key('share_month_${group.id}')`).
+- `lib/ui/features/home/views/home_view.dart` — Conexión con `Clipboard.setData(...)` y notificación `SnackBar`.
+**Resultado:** ✅ Exitoso — **26/26 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_
