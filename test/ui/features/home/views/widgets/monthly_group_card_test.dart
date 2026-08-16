@@ -61,9 +61,8 @@ void main() {
 
       // Verify header contents
       expect(find.text('Agosto 2026'), findsOneWidget);
-      expect(find.textContaining('Total: 500.0 Bs'), findsOneWidget);
-      expect(find.text('Yo: 200.0 Bs'), findsOneWidget);
-      expect(find.text('Vecina: 300.0 Bs'), findsOneWidget);
+      expect(find.text('1 servicio'), findsOneWidget);
+      expect(find.text('500.0 Bs'), findsOneWidget);
 
       // Bill item should not be rendered when collapsed
       expect(find.text('BillItem: bill-1'), findsNothing);

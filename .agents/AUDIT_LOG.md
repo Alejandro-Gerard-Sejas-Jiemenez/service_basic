@@ -533,4 +533,17 @@
 
 ---
 
+### [2026-08-16 19:17] Sesión 36 — Rediseño del Header Mensual y Simplificación Ergonómica de BillItem
+
+**Tarea:** Eliminación del círculo de pago y detalle redundante en el header de `MonthlyGroupCard`, ubicando el monto total visible a la derecha. Rediseño de `BillItem` permitiendo editar al tocar la fila completa y limpiando la barra de acciones.
+**Skill aplicada:** flutter-ui & flutter-apply-architecture-best-practices
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/widgets/monthly_group_card.dart` — Header estilizado con total visible a la derecha y subtítulo limpio (`N servicios`).
+- `lib/ui/features/home/views/widgets/bill_item.dart` — Fila completa interactiva (`InkWell` para editar), icono temático en badge suave y acciones compactas a la derecha.
+- `test/ui/features/home/views/widgets/monthly_group_card_test.dart` — Tests actualizados para validar el nuevo header.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

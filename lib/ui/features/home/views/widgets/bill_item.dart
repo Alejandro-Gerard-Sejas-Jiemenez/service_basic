@@ -4,7 +4,6 @@ import 'package:basic_service/domain/models/service_type.dart';
 import 'package:basic_service/ui/core/colors.dart';
 import 'package:basic_service/ui/core/sizes.dart';
 import 'package:basic_service/ui/core/strings.dart';
-import 'package:basic_service/ui/core/widgets/payment_circle.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Extracted widget: ítem individual de factura en la lista mensual
@@ -39,62 +38,58 @@ class BillItem extends StatelessWidget {
 
     final splitsDetail = bill.splits
         .map((s) => '${s.name}: ${s.assignedAmount.toStringAsFixed(1)} Bs')
-        .join('\n');
+        .join(' • ');
     final detailText =
-        'Yo: ${bill.ownerAmount.toStringAsFixed(1)} Bs\n$splitsDetail';
+        'Yo: ${bill.ownerAmount.toStringAsFixed(1)} Bs • $splitsDetail';
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xs,
-        vertical: AppSpacing.xs,
-      ),
       decoration: const BoxDecoration(
         border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0), width: 1)),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Toggle de pago — skill: "Ensure 48×48 dp touch targets" & "Accessibility: Include Semantics"
-          Semantics(
-            button: true,
-            label:
-                '${bill.type.displayName}, ${bill.isPaid ? "marcado como pagado" : "pendiente de pago"}, ${bill.totalAmount.toStringAsFixed(1)} Bolivianos. Toca para cambiar estado.',
-            child: GestureDetector(
-              key: Key('toggle_payment_${bill.id}'),
-              onTap: onTogglePayment,
-              child: SizedBox(
-                width: 48,
-                height: 48,
-                child: Center(
-                  child: PaymentCircle(isPaid: bill.isPaid, size: 26),
-                ),
-              ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          key: Key('edit_bill_${bill.id}'),
+          onTap: onEdit,
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
             ),
-          ),
-          const SizedBox(width: AppSpacing.xs),
-
-          // Nombre del servicio con ícono al mismo nivel + detalle abajo
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      iconData,
-                      color: iconColor.withValues(
-                        alpha: bill.isPaid ? 0.4 : 1.0,
-                      ),
-                      size: 15,
+                // Ícono temático del servicio en badge redondeado
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: iconColor.withValues(
+                      alpha: bill.isPaid ? 0.08 : 0.15,
                     ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      child: Text(
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                  ),
+                  child: Icon(
+                    iconData,
+                    size: 20,
+                    color: iconColor.withValues(
+                      alpha: bill.isPaid ? 0.45 : 1.0,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+
+                // Nombre del servicio + desglose
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         bill.type.displayName,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: bill.isPaid
                               ? AppColors.textSecondary.withValues(alpha: 0.6)
@@ -104,79 +99,92 @@ class BillItem extends StatelessWidget {
                               : TextDecoration.none,
                         ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 2),
+                      Text(
+                        detailText,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: AppColors.textSecondary.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  detailText,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: AppColors.textSecondary.withValues(alpha: 0.8),
-                    height: 1.5,
+
+                const SizedBox(width: AppSpacing.xs),
+
+                // Monto total
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${bill.totalAmount.toStringAsFixed(1)} Bs',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: bill.isPaid
+                            ? AppColors.textSecondary.withValues(alpha: 0.5)
+                            : AppColors.textPrimary,
+                        decoration: bill.isPaid
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Toggle de estado de pago accesible
+                Semantics(
+                  button: true,
+                  label:
+                      '${bill.type.displayName}, ${bill.isPaid ? "marcado como pagado" : "pendiente de pago"}, ${bill.totalAmount.toStringAsFixed(1)} Bolivianos. Toca para cambiar estado.',
+                  child: IconButton(
+                    key: Key('toggle_payment_${bill.id}'),
+                    tooltip: bill.isPaid
+                        ? 'Marcar como pendiente'
+                        : 'Marcar como pagado',
+                    icon: Icon(
+                      bill.isPaid
+                          ? Icons.check_circle_rounded
+                          : Icons.radio_button_unchecked,
+                      size: 22,
+                      color: bill.isPaid
+                          ? const Color(0xFF10B981)
+                          : AppColors.textSecondary,
+                    ),
+                    onPressed: onTogglePayment,
+                    constraints: const BoxConstraints(
+                      minWidth: 44,
+                      minHeight: 44,
+                    ),
+                  ),
+                ),
+
+                // Botón eliminar
+                Semantics(
+                  button: true,
+                  label: 'Eliminar factura de ${bill.type.displayName}',
+                  child: IconButton(
+                    key: Key('delete_bill_${bill.id}'),
+                    tooltip: AppStrings.delete,
+                    icon: Icon(
+                      Icons.delete_outline,
+                      size: 19,
+                      color: Colors.grey.shade400,
+                    ),
+                    onPressed: onDelete,
+                    constraints: const BoxConstraints(
+                      minWidth: 44,
+                      minHeight: 44,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-
-          const SizedBox(width: AppSpacing.xs),
-
-          // Monto total
-          Flexible(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerRight,
-              child: Text(
-                '${bill.totalAmount.toStringAsFixed(1)} Bs',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: bill.isPaid
-                      ? AppColors.textSecondary.withValues(alpha: 0.5)
-                      : AppColors.textPrimary,
-                  decoration: bill.isPaid
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
-                ),
-              ),
-            ),
-          ),
-
-          // Botón editar — skill: "Ensure 48×48 dp touch targets" & "Accessibility: Include Semantics"
-          Semantics(
-            button: true,
-            label: 'Editar factura de ${bill.type.displayName}',
-            child: IconButton(
-              key: Key('edit_bill_${bill.id}'),
-              tooltip: 'Editar',
-              icon: Icon(
-                Icons.edit_outlined,
-                size: 20,
-                color: Colors.grey.shade600,
-              ),
-              onPressed: onEdit,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-            ),
-          ),
-
-          // Botón eliminar — skill: "Ensure 48×48 dp touch targets" & "Accessibility: Include Semantics"
-          Semantics(
-            button: true,
-            label: 'Eliminar factura de ${bill.type.displayName}',
-            child: IconButton(
-              key: Key('delete_bill_${bill.id}'),
-              tooltip: AppStrings.delete,
-              icon: Icon(
-                Icons.delete_outline,
-                size: 20,
-                color: Colors.grey.shade400,
-              ),
-              onPressed: onDelete,
-              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
