@@ -522,4 +522,15 @@
 
 ---
 
+### [2026-08-16 15:53] Sesión 35 — Armonización de Tipografía Blanca en KPIs y Coordinación Neutral en Estado de Gastos
+
+**Tarea:** Modificación de los números de KPI (Mi Parte y Vecinos) a color blanco puro en la tarjeta principal de `MetricsScreen`, y coordinación de los textos e iconos de "Pendiente" con la paleta neutral (`textSecondary`) en armonía con "Pagado" y la barra de progreso.
+**Skill aplicada:** flutter-ui & dart-run-static-analysis
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/metrics_screen.dart` — Números de KPIs en blanco (`Colors.white`), texto e icono de Pendiente coordinados en `AppColors.textSecondary`.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

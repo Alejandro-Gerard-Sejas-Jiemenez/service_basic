@@ -106,7 +106,6 @@ class MetricsScreen extends StatelessWidget {
                                 label: AppStrings.myTotal,
                                 value:
                                     '${viewModel.allTimeOwnerTotal.toStringAsFixed(1)} Bs',
-                                color: AppColors.owner,
                               ),
                             ),
                             const SizedBox(width: AppSpacing.xs),
@@ -115,7 +114,6 @@ class MetricsScreen extends StatelessWidget {
                                 label: AppStrings.tenantTotal,
                                 value:
                                     '${viewModel.allTimeTenantTotal.toStringAsFixed(1)} Bs',
-                                color: AppColors.tenant,
                               ),
                             ),
                           ],
@@ -190,7 +188,7 @@ class MetricsScreen extends StatelessWidget {
                                   const Icon(
                                     Icons.check_circle_outline_rounded,
                                     size: 15,
-                                    color: AppColors.textPrimary,
+                                    color: AppColors.textSecondary,
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
@@ -219,7 +217,7 @@ class MetricsScreen extends StatelessWidget {
                                   const Icon(
                                     Icons.hourglass_empty_rounded,
                                     size: 15,
-                                    color: AppColors.owner,
+                                    color: AppColors.textSecondary,
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
@@ -231,8 +229,8 @@ class MetricsScreen extends StatelessWidget {
                                         textAlign: TextAlign.end,
                                         style: const TextStyle(
                                           fontSize: 12,
-                                          color: AppColors.owner,
-                                          fontWeight: FontWeight.w600,
+                                          color: AppColors.textSecondary,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ),
@@ -478,11 +476,7 @@ class MetricsScreen extends StatelessWidget {
     );
   }
 
-  static Widget _buildKpiMini({
-    required String label,
-    required String value,
-    required Color color,
-  }) {
+  static Widget _buildKpiMini({required String label, required String value}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -493,8 +487,8 @@ class MetricsScreen extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style: TextStyle(
-            color: color,
+          style: const TextStyle(
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
