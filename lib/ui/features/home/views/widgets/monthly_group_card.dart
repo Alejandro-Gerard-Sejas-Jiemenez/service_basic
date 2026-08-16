@@ -65,6 +65,7 @@ class MonthlyGroupCard extends StatelessWidget {
                   vertical: AppSpacing.sm,
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Column(
@@ -93,21 +94,15 @@ class MonthlyGroupCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(width: AppSpacing.xs),
-                    Flexible(
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '${group.totalAmount.toStringAsFixed(1)} Bs',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: isExpanded
-                                ? Colors.white
-                                : AppColors.textPrimary,
-                          ),
-                        ),
+                    const SizedBox(width: AppSpacing.sm),
+                    Text(
+                      '${group.totalAmount.toStringAsFixed(1)} Bs',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: isExpanded
+                            ? Colors.white
+                            : AppColors.textPrimary,
                       ),
                     ),
                     const SizedBox(width: AppSpacing.xs),
@@ -117,6 +112,12 @@ class MonthlyGroupCard extends StatelessWidget {
                       child: IconButton(
                         key: Key('share_month_${group.id}'),
                         tooltip: 'Compartir resumen',
+                        padding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
                         icon: Icon(
                           Icons.share_outlined,
                           size: 18,
@@ -125,17 +126,14 @@ class MonthlyGroupCard extends StatelessWidget {
                               : AppColors.textSecondary,
                         ),
                         onPressed: onShare,
-                        constraints: const BoxConstraints(
-                          minWidth: 40,
-                          minHeight: 40,
-                        ),
                       ),
                     ),
+                    const SizedBox(width: 2),
                     Icon(
                       isExpanded
                           ? Icons.keyboard_arrow_up
                           : Icons.keyboard_arrow_down,
-                      size: 18,
+                      size: 20,
                       color: isExpanded
                           ? _monthSubTextExp
                           : AppColors.textSecondary,

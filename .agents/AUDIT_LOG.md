@@ -546,4 +546,15 @@
 
 ---
 
+### [2026-08-16 19:23] Sesión 37 — Alineación del Monto Total a la Derecha en Header Mensual
+
+**Tarea:** Reubicación y compactación de los iconos de acciones en `MonthlyGroupCard` para posicionar el monto total más a la derecha, preservando la armonía y accesibilidad.
+**Skill aplicada:** flutter-ui & dart-run-static-analysis
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/widgets/monthly_group_card.dart` — Ajuste de espaciados y densidad compacta para alinear el total a la derecha junto a los iconos.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_
