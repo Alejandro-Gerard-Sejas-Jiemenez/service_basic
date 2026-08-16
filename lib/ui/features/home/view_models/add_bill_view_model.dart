@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:basic_service/domain/models/neighbor_split.dart';
+import 'package:basic_service/domain/models/service_bill.dart';
 import 'package:basic_service/domain/models/service_type.dart';
 
 /// Entrada que encapsula los controladores de un vecino individual.
@@ -18,15 +19,16 @@ class NeighborControllerEntry {
   }
 }
 
-/// ViewModel para la pantalla de adición de facturas.
+/// ViewModel para la pantalla de adición/edición de facturas.
 /// Gestiona controladores, reactividad, auto-distribución matemática y validación.
 class AddBillViewModel extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final ServiceBill? initialBill;
 
-  ServiceType _type = ServiceType.electricity;
+  late ServiceType _type;
   ServiceType get type => _type;
 
-  DateTime _date = DateTime.now();
+  late DateTime _date;
   DateTime get date => _date;
 
   final TextEditingController totalController = TextEditingController();
@@ -34,7 +36,27 @@ class AddBillViewModel extends ChangeNotifier {
   final List<NeighborControllerEntry> _neighbors = [];
   List<NeighborControllerEntry> get neighbors => List.unmodifiable(_neighbors);
 
-  AddBillViewModel() {
+  bool get isEditing => initialBill != null;
+
+  AddBillViewModel({this.initialBill, DateTime? initialDate}) {
+    if (initialBill != null) {
+      _type = initialBill!.type;
+      _date = initialDate ?? DateTime.now();
+      totalController.text = initialBill!.totalAmount.toStringAsFixed(1);
+      ownerController.text = initialBill!.ownerAmount.toStringAsFixed(1);
+      for (final split in initialBill!.splits) {
+        _neighbors.add(
+          NeighborControllerEntry(
+            name: split.name,
+            amount: split.assignedAmount.toStringAsFixed(1),
+          ),
+        );
+      }
+    } else {
+      _type = ServiceType.electricity;
+      _date = initialDate ?? DateTime.now();
+    }
+
     totalController.addListener(autoDistribute);
     ownerController.addListener(autoDistribute);
   }

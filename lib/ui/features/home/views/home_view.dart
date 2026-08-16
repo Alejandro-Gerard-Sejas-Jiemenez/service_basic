@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../core/colors.dart';
-import '../../../core/sizes.dart';
-import '../../../core/strings.dart';
+import 'package:basic_service/domain/models/service_bill.dart';
+import 'package:basic_service/ui/core/colors.dart';
+import 'package:basic_service/ui/core/sizes.dart';
+import 'package:basic_service/ui/core/strings.dart';
+import '../view_models/add_bill_view_model.dart';
 import '../view_models/expense_view_model.dart';
 import 'add_bill_screen.dart';
 import 'widgets/bill_item.dart';
@@ -69,6 +71,51 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void _showEditBill(BuildContext context, String groupId, ServiceBill bill) {
+    final dateParts = groupId.split('-');
+    final initialDate = dateParts.length >= 2
+        ? DateTime(
+            int.tryParse(dateParts[0]) ?? DateTime.now().year,
+            int.tryParse(dateParts[1]) ?? DateTime.now().month,
+          )
+        : DateTime.now();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => AddBillScreen(
+          viewModel: AddBillViewModel(
+            initialBill: bill,
+            initialDate: initialDate,
+          ),
+          onSave:
+              ({
+                required monthId,
+                required monthName,
+                required type,
+                required totalAmount,
+                required ownerAmount,
+                required splits,
+              }) {
+                final updated = bill.copyWith(
+                  type: type,
+                  totalAmount: totalAmount,
+                  ownerAmount: ownerAmount,
+                  splits: splits,
+                );
+                widget.viewModel.updateBill(
+                  oldGroupId: groupId,
+                  newGroupId: monthId,
+                  newGroupName: monthName,
+                  updatedBill: updated,
+                );
+                setState(() => _expandedGroups[monthId] = true);
+              },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,6 +170,8 @@ class _HomeViewState extends State<HomeView> {
                               bill: bill,
                               onTogglePayment: () => widget.viewModel
                                   .toggleBillPayment(groupId, bill.id),
+                              onEdit: () =>
+                                  _showEditBill(context, groupId, bill),
                               onDelete: () =>
                                   _showDeleteConfirmation(groupId, bill.id),
                             ),

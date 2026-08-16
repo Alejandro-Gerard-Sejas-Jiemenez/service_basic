@@ -379,4 +379,22 @@
 
 ---
 
+### [2026-08-16 14:50] Sesión 25 — Tarea F1: Edición de Facturas Existentes
+
+**Tarea:** Implementación completa de edición de facturas (montos, tipo de servicio, fecha/mes y vecinos)
+**Skill aplicada:** flutter-ui, flutter-apply-architecture-best-practices & dart-add-unit-test
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/view_models/expense_view_model.dart` — Añadido método `updateBill(...)` con soporte para reemplazo in-situ y migración de meses.
+- `lib/ui/features/home/view_models/add_bill_view_model.dart` — Soporte de edición precargando `initialBill` e `initialDate`.
+- `lib/ui/features/home/views/widgets/bill_item.dart` — Añadido botón de edición con touch target accesible de 48dp (`Key('edit_bill_${bill.id}')`).
+- `lib/ui/features/home/views/add_bill_screen.dart` — Título dinámico ("Editar factura" vs "Nueva factura").
+- `lib/ui/features/home/views/home_view.dart` — Flujo de navegación `_showEditBill` y conexión con `updateBill`.
+- `lib/ui/core/strings.dart` — Añadido string `editBillTitle`.
+- `test/ui/features/home/view_models/expense_view_model_test.dart` — 3 nuevos tests unitarios para `updateBill`.
+- `test/ui/features/home/view_models/add_bill_view_model_test.dart` — Nuevo test unitario para modo edición con `initialBill`.
+**Resultado:** ✅ Exitoso — **24/24 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

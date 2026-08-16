@@ -263,4 +263,157 @@ void main() {
       expect(viewModel.groups, isEmpty);
     });
   });
+
+  group('ExpenseViewModel - updateBill', () {
+    test('replaces bill in place when month remains the same', () async {
+      repository.inMemoryData = [
+        const MonthlyGroup(
+          id: '2026-08',
+          monthName: 'Agosto 2026',
+          bills: [
+            ServiceBill(
+              id: 'bill-1',
+              type: ServiceType.water,
+              totalAmount: 100.0,
+              ownerAmount: 50.0,
+              splits: [],
+              isPaid: false,
+            ),
+          ],
+        ),
+      ];
+      await viewModel.loadExpenses();
+
+      const updatedBill = ServiceBill(
+        id: 'bill-1',
+        type: ServiceType.electricity,
+        totalAmount: 250.0,
+        ownerAmount: 150.0,
+        splits: [
+          NeighborSplit(name: 'Vecino', assignedAmount: 100.0, isPaid: false),
+        ],
+        isPaid: false,
+      );
+
+      await viewModel.updateBill(
+        oldGroupId: '2026-08',
+        newGroupId: '2026-08',
+        newGroupName: 'Agosto 2026',
+        updatedBill: updatedBill,
+      );
+
+      expect(viewModel.groups.length, 1);
+      final group = viewModel.groups.first;
+      expect(group.bills.length, 1);
+      expect(group.bills.first.type, ServiceType.electricity);
+      expect(group.bills.first.totalAmount, 250.0);
+      expect(group.bills.first.splits.length, 1);
+    });
+
+    test(
+      'moves bill to another existing month group when month changes',
+      () async {
+        repository.inMemoryData = [
+          const MonthlyGroup(
+            id: '2026-08',
+            monthName: 'Agosto 2026',
+            bills: [
+              ServiceBill(
+                id: 'bill-1',
+                type: ServiceType.water,
+                totalAmount: 100.0,
+                ownerAmount: 50.0,
+                splits: [],
+                isPaid: false,
+              ),
+              ServiceBill(
+                id: 'bill-2',
+                type: ServiceType.gas,
+                totalAmount: 50.0,
+                ownerAmount: 25.0,
+                splits: [],
+                isPaid: false,
+              ),
+            ],
+          ),
+          const MonthlyGroup(
+            id: '2026-09',
+            monthName: 'Septiembre 2026',
+            bills: [],
+          ),
+        ];
+        await viewModel.loadExpenses();
+
+        const updatedBill = ServiceBill(
+          id: 'bill-1',
+          type: ServiceType.water,
+          totalAmount: 120.0,
+          ownerAmount: 60.0,
+          splits: [],
+          isPaid: false,
+        );
+
+        await viewModel.updateBill(
+          oldGroupId: '2026-08',
+          newGroupId: '2026-09',
+          newGroupName: 'Septiembre 2026',
+          updatedBill: updatedBill,
+        );
+
+        final aug = viewModel.groups.firstWhere((g) => g.id == '2026-08');
+        final sep = viewModel.groups.firstWhere((g) => g.id == '2026-09');
+
+        expect(aug.bills.length, 1);
+        expect(aug.bills.first.id, 'bill-2');
+
+        expect(sep.bills.length, 1);
+        expect(sep.bills.first.id, 'bill-1');
+        expect(sep.bills.first.totalAmount, 120.0);
+      },
+    );
+
+    test(
+      'creates new month group and removes empty old group when month changes',
+      () async {
+        repository.inMemoryData = [
+          const MonthlyGroup(
+            id: '2026-08',
+            monthName: 'Agosto 2026',
+            bills: [
+              ServiceBill(
+                id: 'bill-1',
+                type: ServiceType.water,
+                totalAmount: 100.0,
+                ownerAmount: 50.0,
+                splits: [],
+                isPaid: false,
+              ),
+            ],
+          ),
+        ];
+        await viewModel.loadExpenses();
+
+        const updatedBill = ServiceBill(
+          id: 'bill-1',
+          type: ServiceType.water,
+          totalAmount: 150.0,
+          ownerAmount: 75.0,
+          splits: [],
+          isPaid: false,
+        );
+
+        await viewModel.updateBill(
+          oldGroupId: '2026-08',
+          newGroupId: '2026-10',
+          newGroupName: 'Octubre 2026',
+          updatedBill: updatedBill,
+        );
+
+        expect(viewModel.groups.length, 1);
+        expect(viewModel.groups.first.id, '2026-10');
+        expect(viewModel.groups.first.monthName, 'Octubre 2026');
+        expect(viewModel.groups.first.bills.first.totalAmount, 150.0);
+      },
+    );
+  });
 }

@@ -117,6 +117,7 @@ basic_service/
 | 2026-08-13 | CREADO | `add_bill_view_model.dart` | MVVM Refactor | ViewModel desacoplado con autoDistribute, gestión de controllers y submit |
 | 2026-08-13 | CREADO | `add_bill_view_model_test.dart` | MVVM Refactor | Suite de 5 tests unitarios para AddBillViewModel |
 | 2026-08-13 | CREADO | `add_bill_bottom_bar.dart` | Modularización | Barra de acciones inferior reutilizable (48dp touch targets) |
+| 2026-08-16 | MODIFICADO | `varios archivos` | F1 | Edición completa de facturas existentes (VM, Screen, Items, Tests) |
 
 ---
 

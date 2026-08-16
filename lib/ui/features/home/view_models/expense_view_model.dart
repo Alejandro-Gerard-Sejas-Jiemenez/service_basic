@@ -156,4 +156,53 @@ class ExpenseViewModel extends ChangeNotifier {
     await _repository.saveMonthlyGroups(_groups);
     notifyListeners();
   }
+
+  Future<void> updateBill({
+    required String oldGroupId,
+    required String newGroupId,
+    required String newGroupName,
+    required ServiceBill updatedBill,
+  }) async {
+    final oldGroupIndex = _groups.indexWhere((g) => g.id == oldGroupId);
+    if (oldGroupIndex == -1) return;
+
+    if (oldGroupId == newGroupId) {
+      final group = _groups[oldGroupIndex];
+      final billIndex = group.bills.indexWhere((b) => b.id == updatedBill.id);
+      if (billIndex == -1) return;
+
+      final updatedBills = List<ServiceBill>.from(group.bills);
+      updatedBills[billIndex] = updatedBill;
+      _groups[oldGroupIndex] = group.copyWith(bills: updatedBills);
+    } else {
+      final oldGroup = _groups[oldGroupIndex];
+      final oldBills = List<ServiceBill>.from(oldGroup.bills)
+        ..removeWhere((b) => b.id == updatedBill.id);
+
+      if (oldBills.isEmpty) {
+        _groups.removeAt(oldGroupIndex);
+      } else {
+        _groups[oldGroupIndex] = oldGroup.copyWith(bills: oldBills);
+      }
+
+      final newGroupIndex = _groups.indexWhere((g) => g.id == newGroupId);
+      if (newGroupIndex != -1) {
+        final newGroup = _groups[newGroupIndex];
+        final newBills = List<ServiceBill>.from(newGroup.bills)
+          ..add(updatedBill);
+        _groups[newGroupIndex] = newGroup.copyWith(bills: newBills);
+      } else {
+        final newGroup = MonthlyGroup(
+          id: newGroupId,
+          monthName: newGroupName,
+          bills: [updatedBill],
+        );
+        _groups.add(newGroup);
+        _groups.sort((a, b) => b.id.compareTo(a.id));
+      }
+    }
+
+    await _repository.saveMonthlyGroups(_groups);
+    notifyListeners();
+  }
 }

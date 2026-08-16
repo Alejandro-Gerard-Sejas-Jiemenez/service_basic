@@ -112,9 +112,11 @@ class _AddBillScreenState extends State<AddBillScreen> {
             backgroundColor: AppColors.headerBg,
             foregroundColor: Colors.white,
             elevation: 0,
-            title: const Text(
-              AppStrings.addBillTitle,
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+            title: Text(
+              _viewModel.isEditing
+                  ? AppStrings.editBillTitle
+                  : AppStrings.addBillTitle,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
             ),
             leading: IconButton(
               key: const Key('add_bill_close'),

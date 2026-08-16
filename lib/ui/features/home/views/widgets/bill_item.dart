@@ -14,12 +14,14 @@ import 'package:basic_service/ui/core/widgets/payment_circle.dart';
 class BillItem extends StatelessWidget {
   final ServiceBill bill;
   final VoidCallback onTogglePayment;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   const BillItem({
     super.key,
     required this.bill,
     required this.onTogglePayment,
+    required this.onEdit,
     required this.onDelete,
   });
 
@@ -129,6 +131,23 @@ class BillItem extends StatelessWidget {
               decoration: bill.isPaid
                   ? TextDecoration.lineThrough
                   : TextDecoration.none,
+            ),
+          ),
+
+          // Botón editar — skill: "Ensure 48×48 dp touch targets" & "Accessibility: Include Semantics"
+          Semantics(
+            button: true,
+            label: 'Editar factura de ${bill.type.displayName}',
+            child: IconButton(
+              key: Key('edit_bill_${bill.id}'),
+              tooltip: 'Editar',
+              icon: Icon(
+                Icons.edit_outlined,
+                size: 20,
+                color: Colors.grey.shade600,
+              ),
+              onPressed: onEdit,
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
             ),
           ),
 

@@ -7,6 +7,7 @@ class AppStrings {
   // Home Screen
   static const String addBillButton = 'Agregar factura';
   static const String addBillTitle = 'Nueva factura';
+  static const String editBillTitle = 'Editar factura';
   static const String noBillsFound = 'No hay facturas registradas.';
 
   // Dialogs
