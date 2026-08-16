@@ -89,17 +89,20 @@ class BillItem extends StatelessWidget {
                       size: 15,
                     ),
                     const SizedBox(width: 5),
-                    Text(
-                      bill.type.displayName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: bill.isPaid
-                            ? AppColors.textSecondary.withValues(alpha: 0.6)
-                            : AppColors.textPrimary,
-                        decoration: bill.isPaid
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
+                    Expanded(
+                      child: Text(
+                        bill.type.displayName,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: bill.isPaid
+                              ? AppColors.textSecondary.withValues(alpha: 0.6)
+                              : AppColors.textPrimary,
+                          decoration: bill.isPaid
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
                       ),
                     ),
                   ],

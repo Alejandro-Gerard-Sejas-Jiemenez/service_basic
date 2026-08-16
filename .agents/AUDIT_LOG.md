@@ -498,4 +498,17 @@
 
 ---
 
+### [2026-08-16 15:40] Sesión 33 — Filtro Compacto de 2 Selectores y Corrección de Overflow en BillItem
+
+**Tarea:** Rediseño de la barra de filtros a una sola fila con 2 selectores desplegables (Estado de Pago y Tipo de Servicio) + botón de resetear y corrección de overflow de 12px en el título de BillItem.
+**Skill aplicada:** flutter-ui & dart-run-static-analysis
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/widgets/bill_item.dart` — `Expanded` con `TextOverflow.ellipsis` en el título del servicio, eliminando el overflow de 12-13px.
+- `lib/ui/features/home/views/widgets/home_filters_bar.dart` — Barra compacta en 1 sola fila con `PopupMenuButton` para Estado (`filter_status_dropdown`) y Servicio (`filter_service_dropdown`), más botón `clear_filters_btn` cuando hay filtros activos.
+- `test/ui/features/home/views/widgets/home_filters_bar_test.dart` — Suite de tests actualizada para validar el flujo completo de selección en los dos menús.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

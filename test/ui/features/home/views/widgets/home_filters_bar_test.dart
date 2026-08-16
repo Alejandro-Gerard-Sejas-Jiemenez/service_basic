@@ -28,59 +28,75 @@ void main() {
   }
 
   group('HomeFiltersBar Widget Tests', () {
-    testWidgets('renders chips and notifies when tapped', (
-      WidgetTester tester,
-    ) async {
-      ServiceType? changedService;
-      PaymentStatusFilter? changedStatus;
-      var cleared = false;
+    testWidgets(
+      'renders status and service dropdowns and notifies when selected',
+      (WidgetTester tester) async {
+        ServiceType? changedService;
+        PaymentStatusFilter? changedStatus;
+        var cleared = false;
 
-      await tester.pumpWidget(
-        buildTestWidget(
-          selectedService: null,
-          selectedStatus: PaymentStatusFilter.all,
-          hasActiveFilters: false,
-          onServiceChanged: (type) => changedService = type,
-          onStatusChanged: (status) => changedStatus = status,
-          onClear: () => cleared = true,
-        ),
-      );
+        await tester.pumpWidget(
+          buildTestWidget(
+            selectedService: null,
+            selectedStatus: PaymentStatusFilter.all,
+            hasActiveFilters: false,
+            onServiceChanged: (type) => changedService = type,
+            onStatusChanged: (status) => changedStatus = status,
+            onClear: () => cleared = true,
+          ),
+        );
 
-      // Verify presence of all status chips
-      expect(find.byKey(const Key('filter_status_all')), findsOneWidget);
-      expect(find.byKey(const Key('filter_status_pending')), findsOneWidget);
-      expect(find.byKey(const Key('filter_status_paid')), findsOneWidget);
+        // Verify presence of status & service dropdown triggers
+        expect(find.byKey(const Key('filter_status_dropdown')), findsOneWidget);
+        expect(
+          find.byKey(const Key('filter_service_dropdown')),
+          findsOneWidget,
+        );
 
-      // Tap pending filter
-      await tester.tap(find.byKey(const Key('filter_status_pending')));
-      expect(changedStatus, PaymentStatusFilter.pending);
+        // Open status dropdown and select pending
+        await tester.tap(find.byKey(const Key('filter_status_dropdown')));
+        await tester.pumpAndSettle();
 
-      // Tap electricity filter
-      await tester.tap(
-        find.byKey(Key('filter_service_${ServiceType.electricity.name}')),
-      );
-      expect(changedService, ServiceType.electricity);
+        expect(find.byKey(const Key('filter_status_pending')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('filter_status_pending')));
+        await tester.pumpAndSettle();
 
-      // Clear button should not be present when hasActiveFilters is false
-      expect(find.byKey(const Key('clear_filters_btn')), findsNothing);
+        expect(changedStatus, PaymentStatusFilter.pending);
 
-      // Rebuild with active filters to verify clear button
-      await tester.pumpWidget(
-        buildTestWidget(
-          selectedService: ServiceType.electricity,
-          selectedStatus: PaymentStatusFilter.pending,
-          hasActiveFilters: true,
-          onServiceChanged: (type) => changedService = type,
-          onStatusChanged: (status) => changedStatus = status,
-          onClear: () => cleared = true,
-        ),
-      );
+        // Open service dropdown and select electricity
+        await tester.tap(find.byKey(const Key('filter_service_dropdown')));
+        await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('clear_filters_btn')), findsOneWidget);
-      await tester.ensureVisible(find.byKey(const Key('clear_filters_btn')));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('clear_filters_btn')));
-      expect(cleared, isTrue);
-    });
+        expect(
+          find.byKey(Key('filter_service_${ServiceType.electricity.name}')),
+          findsOneWidget,
+        );
+        await tester.tap(
+          find.byKey(Key('filter_service_${ServiceType.electricity.name}')),
+        );
+        await tester.pumpAndSettle();
+
+        expect(changedService, ServiceType.electricity);
+
+        // Clear button should not be present when hasActiveFilters is false
+        expect(find.byKey(const Key('clear_filters_btn')), findsNothing);
+
+        // Rebuild with active filters to verify clear button
+        await tester.pumpWidget(
+          buildTestWidget(
+            selectedService: ServiceType.electricity,
+            selectedStatus: PaymentStatusFilter.pending,
+            hasActiveFilters: true,
+            onServiceChanged: (type) => changedService = type,
+            onStatusChanged: (status) => changedStatus = status,
+            onClear: () => cleared = true,
+          ),
+        );
+
+        expect(find.byKey(const Key('clear_filters_btn')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('clear_filters_btn')));
+        expect(cleared, isTrue);
+      },
+    );
   });
 }
