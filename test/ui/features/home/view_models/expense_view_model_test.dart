@@ -503,4 +503,79 @@ void main() {
       expect(viewModel.filteredGroups.first.bills.length, 2);
     });
   });
+
+  group('ExpenseViewModel - Metrics & Statistics', () {
+    test('computes metrics accurately across multiple months', () async {
+      repository.inMemoryData = [
+        const MonthlyGroup(
+          id: '2026-08',
+          monthName: 'Agosto 2026',
+          bills: [
+            ServiceBill(
+              id: 'bill-1',
+              type: ServiceType.electricity,
+              totalAmount: 500.0,
+              ownerAmount: 200.0,
+              splits: [
+                NeighborSplit(
+                  name: 'Vecina',
+                  assignedAmount: 300.0,
+                  isPaid: false,
+                ),
+              ],
+              isPaid: false,
+            ),
+          ],
+        ),
+        const MonthlyGroup(
+          id: '2026-07',
+          monthName: 'Julio 2026',
+          bills: [
+            ServiceBill(
+              id: 'bill-2',
+              type: ServiceType.water,
+              totalAmount: 100.0,
+              ownerAmount: 50.0,
+              splits: [
+                NeighborSplit(
+                  name: 'Vecina',
+                  assignedAmount: 50.0,
+                  isPaid: true,
+                ),
+              ],
+              isPaid: true,
+            ),
+          ],
+        ),
+      ];
+      await viewModel.loadExpenses();
+
+      expect(viewModel.allTimeTotal, 600.0);
+      expect(viewModel.allTimeOwnerTotal, 250.0);
+      expect(viewModel.allTimeTenantTotal, 350.0);
+      expect(viewModel.allTimePaidTotal, 100.0);
+      expect(viewModel.allTimePendingTotal, 500.0);
+      expect(viewModel.monthlyAverage, 300.0);
+      expect(viewModel.paidPercentage, closeTo(16.66, 0.1));
+
+      final byService = viewModel.totalByServiceType;
+      expect(byService[ServiceType.electricity], 500.0);
+      expect(byService[ServiceType.water], 100.0);
+      expect(byService[ServiceType.gas], 0.0);
+      expect(byService[ServiceType.internet], 0.0);
+    });
+
+    test('handles empty dataset gracefully without division by zero', () async {
+      repository.inMemoryData = [];
+      await viewModel.loadExpenses();
+
+      expect(viewModel.allTimeTotal, 0.0);
+      expect(viewModel.allTimeOwnerTotal, 0.0);
+      expect(viewModel.allTimeTenantTotal, 0.0);
+      expect(viewModel.allTimePaidTotal, 0.0);
+      expect(viewModel.allTimePendingTotal, 0.0);
+      expect(viewModel.monthlyAverage, 0.0);
+      expect(viewModel.paidPercentage, 0.0);
+    });
+  });
 }

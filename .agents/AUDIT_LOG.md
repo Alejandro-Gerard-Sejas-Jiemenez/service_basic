@@ -443,4 +443,22 @@
 
 ---
 
+### [2026-08-16 15:10] Sesión 29 — Tarea F5: Métricas y Gráficos de Gastos Acumulados
+
+**Tarea:** Implementación de pantalla y lógica de KPIs, desglose por servicio y comparativo mensual
+**Skill aplicada:** flutter-ui, flutter-apply-architecture-best-practices, flutter-add-widget-test & dart-add-unit-test
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos creados:**
+- `lib/ui/features/home/views/metrics_screen.dart` (CREADO) — Pantalla de estadísticas, KPIs de gastos, barras porcentuales y comparativa mensual.
+- `test/ui/features/home/views/metrics_screen_test.dart` (CREADO) — Tests de widget para la pantalla de métricas.
+**Archivos modificados:**
+- `lib/ui/core/strings.dart` — Textos y etiquetas de métricas y estadísticas.
+- `lib/ui/features/home/view_models/expense_view_model.dart` — Getters computados: `allTimeTotal`, `allTimeOwnerTotal`, `allTimeTenantTotal`, `allTimePaidTotal`, `allTimePendingTotal`, `monthlyAverage`, `paidPercentage`, `totalByServiceType`.
+- `lib/ui/features/home/views/widgets/home_header.dart` — Añadido botón accesible con icono de gráficos (`Key('btn_open_metrics')`).
+- `lib/ui/features/home/views/home_view.dart` — Conexión y navegación fluida a `MetricsScreen`.
+- `test/ui/features/home/view_models/expense_view_model_test.dart` — Tests unitarios para cálculos de métricas y casos borde.
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

@@ -224,6 +224,6 @@ Usa estos marcadores en tus peticiones para orientar al agente:
 | F2 | feature | Compartir resumen de deuda por WhatsApp / Portapapeles | flutter-ui | ✅ |
 | F3 | feature | Filtros por tipo de servicio y estado de pago en HomeView | flutter-ui | ✅ |
 | F4 | tests | Tests visuales de widgets con WidgetTester | flutter-add-widget-test | ✅ |
-| F5 | feature | Métricas y gráficos de gastos acumulados | flutter-ui | ⏳ |
+| F5 | feature | Métricas y gráficos de gastos acumulados | flutter-ui | ✅ |
 
 **Leyenda:** ⏳ Pendiente | 🔄 En progreso | ✅ Completado | ❌ Cancelado / No recomendado

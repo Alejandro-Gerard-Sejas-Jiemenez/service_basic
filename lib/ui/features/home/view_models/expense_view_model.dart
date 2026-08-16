@@ -80,6 +80,51 @@ class ExpenseViewModel extends ChangeNotifier {
     return result;
   }
 
+  // ── MÉTRICAS Y ESTADÍSTICAS ──────────────────────────────────────────────
+  double get allTimeTotal => _groups.fold(0.0, (sum, g) => sum + g.totalAmount);
+
+  double get allTimeOwnerTotal =>
+      _groups.fold(0.0, (sum, g) => sum + g.ownerTotal);
+
+  double get allTimeTenantTotal =>
+      _groups.fold(0.0, (sum, g) => sum + g.tenantTotal);
+
+  double get allTimePaidTotal => _groups.fold(
+    0.0,
+    (sum, g) =>
+        sum +
+        g.bills
+            .where((b) => b.isPaid)
+            .fold(0.0, (billSum, b) => billSum + b.totalAmount),
+  );
+
+  double get allTimePendingTotal => _groups.fold(
+    0.0,
+    (sum, g) =>
+        sum +
+        g.bills
+            .where((b) => !b.isPaid)
+            .fold(0.0, (billSum, b) => billSum + b.totalAmount),
+  );
+
+  double get monthlyAverage =>
+      _groups.isEmpty ? 0.0 : allTimeTotal / _groups.length;
+
+  double get paidPercentage =>
+      allTimeTotal == 0.0 ? 0.0 : (allTimePaidTotal / allTimeTotal) * 100.0;
+
+  Map<ServiceType, double> get totalByServiceType {
+    final map = <ServiceType, double>{
+      for (final type in ServiceType.values) type: 0.0,
+    };
+    for (final group in _groups) {
+      for (final bill in group.bills) {
+        map[bill.type] = (map[bill.type] ?? 0.0) + bill.totalAmount;
+      }
+    }
+    return map;
+  }
+
   Future<void> loadExpenses() async {
     _isLoading = true;
     notifyListeners();

@@ -45,4 +45,17 @@ class AppStrings {
   static const String valInvalidAmount = 'Monto inválido';
   static const String valAmountTooHigh = 'No puede ser mayor al total';
   static const String valInvalid = 'Inválido';
+
+  // Metrics Screen
+  static const String metricsTitle = 'Métricas de Gastos';
+  static const String allTimeTotal = 'Total Acumulado';
+  static const String myTotal = 'Mi Parte';
+  static const String tenantTotal = 'Vecinos';
+  static const String paidAmount = 'Pagado';
+  static const String pendingAmount = 'Pendiente';
+  static const String monthlyAverage = 'Promedio Mensual';
+  static const String distributionByService = 'Distribución por Servicio';
+  static const String monthlyHistory = 'Historial por Mes';
+  static const String noMetricsData =
+      'No hay datos suficientes para calcular métricas.';
 }

@@ -9,6 +9,7 @@ import '../services/bill_share_formatter.dart';
 import '../view_models/add_bill_view_model.dart';
 import '../view_models/expense_view_model.dart';
 import 'add_bill_screen.dart';
+import 'metrics_screen.dart';
 import 'widgets/bill_item.dart';
 import 'widgets/delete_bill_dialog.dart';
 import 'widgets/home_filters_bar.dart';
@@ -162,7 +163,17 @@ class _HomeViewState extends State<HomeView> {
 
           return Column(
             children: [
-              const HomeHeader(),
+              HomeHeader(
+                onMetrics: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          MetricsScreen(viewModel: widget.viewModel),
+                    ),
+                  );
+                },
+              ),
               HomeFiltersBar(
                 selectedService: widget.viewModel.selectedServiceFilter,
                 selectedStatus: widget.viewModel.paymentStatusFilter,
