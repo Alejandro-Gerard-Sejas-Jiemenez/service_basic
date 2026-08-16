@@ -109,34 +109,45 @@ class MonthlyGroupCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Yo: ${group.ownerTotal.toStringAsFixed(1)} Bs',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: isExpanded
-                                ? _distPrimaryExp
-                                : _distPrimaryColl,
+                    const SizedBox(width: AppSpacing.xs),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'Yo: ${group.ownerTotal.toStringAsFixed(1)} Bs',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: isExpanded
+                                    ? _distPrimaryExp
+                                    : _distPrimaryColl,
+                              ),
+                            ),
                           ),
-                        ),
-                        Text(
-                          group.bills.isEmpty
-                              ? 'Vecina: 0.0 Bs'
-                              : group.bills.first.splits.length == 1
-                              ? 'Vecina: ${group.tenantTotal.toStringAsFixed(1)} Bs'
-                              : 'Vecinos: ${group.tenantTotal.toStringAsFixed(1)} Bs',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: isExpanded
-                                ? _distSecondaryExp
-                                : _distSecondaryColl,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              group.bills.isEmpty
+                                  ? 'Vecina: 0.0 Bs'
+                                  : group.bills.first.splits.length == 1
+                                  ? 'Vecina: ${group.tenantTotal.toStringAsFixed(1)} Bs'
+                                  : 'Vecinos: ${group.tenantTotal.toStringAsFixed(1)} Bs',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: isExpanded
+                                    ? _distSecondaryExp
+                                    : _distSecondaryColl,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.xs),
                     Semantics(

@@ -6,7 +6,7 @@ import 'package:basic_service/ui/core/strings.dart';
 import '../../view_models/expense_view_model.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Extracted widget: barra horizontal de filtros por estado y tipo de servicio
+// Extracted widget: barra de filtros en 2 niveles (segmentos de estado + chips de servicio)
 // skill: "STRICTLY prohibit private _build*() methods. Extract into separate widget classes."
 // skill: "Ensure 48×48 dp touch targets"
 // ─────────────────────────────────────────────────────────────────────────────
@@ -35,16 +35,14 @@ class HomeFiltersBar extends StatelessWidget {
     ServiceType.internet => (AppColors.internet, Icons.wifi),
   };
 
-  Widget _buildFilterChip({
+  Widget _buildStatusSegment({
     required Key key,
     required String label,
     required bool isSelected,
     required VoidCallback onTap,
     IconData? icon,
-    Color? iconColor,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(right: AppSpacing.xs),
+    return Expanded(
       child: Semantics(
         button: true,
         selected: isSelected,
@@ -52,13 +50,14 @@ class HomeFiltersBar extends StatelessWidget {
         child: InkWell(
           key: key,
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppRadius.full),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 48),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            constraints: const BoxConstraints(minHeight: 40),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
               color: isSelected ? AppColors.headerBg : Colors.white,
-              borderRadius: BorderRadius.circular(AppRadius.full),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
               border: Border.all(
                 color: isSelected
                     ? AppColors.headerBg
@@ -76,17 +75,15 @@ class HomeFiltersBar extends StatelessWidget {
                   : null,
             ),
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (icon != null) ...[
                   Icon(
                     icon,
                     size: 14,
-                    color: isSelected
-                        ? Colors.white
-                        : (iconColor ?? AppColors.textPrimary),
+                    color: isSelected ? Colors.white : AppColors.textSecondary,
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 4),
                 ],
                 Text(
                   label,
@@ -104,6 +101,54 @@ class HomeFiltersBar extends StatelessWidget {
     );
   }
 
+  Widget _buildServiceChip({
+    required Key key,
+    required String label,
+    required bool isSelected,
+    required Color color,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: 'Filtro $label',
+      child: InkWell(
+        key: key,
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(AppRadius.full),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          constraints: const BoxConstraints(minHeight: 36),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: isSelected ? color : Colors.white,
+            borderRadius: BorderRadius.circular(AppRadius.full),
+            border: Border.all(
+              color: isSelected ? color : const Color(0xFFE2E8F0),
+              width: 1.5,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 14, color: isSelected ? Colors.white : color),
+              const SizedBox(width: 4),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                  color: isSelected ? Colors.white : AppColors.textPrimary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,84 +156,109 @@ class HomeFiltersBar extends StatelessWidget {
         horizontal: AppSpacing.md,
         vertical: AppSpacing.xs,
       ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: Row(
-          children: [
-            // Estado de pago
-            _buildFilterChip(
-              key: const Key('filter_status_all'),
-              label: AppStrings.filterAll,
-              isSelected: selectedStatus == PaymentStatusFilter.all,
-              onTap: () => onStatusChanged(PaymentStatusFilter.all),
-            ),
-            _buildFilterChip(
-              key: const Key('filter_status_pending'),
-              label: AppStrings.filterPending,
-              icon: Icons.hourglass_empty_rounded,
-              iconColor: const Color(0xFFF59E0B),
-              isSelected: selectedStatus == PaymentStatusFilter.pending,
-              onTap: () => onStatusChanged(PaymentStatusFilter.pending),
-            ),
-            _buildFilterChip(
-              key: const Key('filter_status_paid'),
-              label: AppStrings.filterPaid,
-              icon: Icons.check_circle_outline_rounded,
-              iconColor: const Color(0xFF10B981),
-              isSelected: selectedStatus == PaymentStatusFilter.paid,
-              onTap: () => onStatusChanged(PaymentStatusFilter.paid),
-            ),
-
-            // Separador vertical
-            Container(
-              height: 24,
-              width: 1,
-              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
-              color: const Color(0xFFCBD5E1),
-            ),
-
-            // Tipos de servicio
-            ...ServiceType.values.map((type) {
-              final isSelected = selectedService == type;
-              final (color, icon) = _serviceMeta(type);
-              return _buildFilterChip(
-                key: Key('filter_service_${type.name}'),
-                label: type.displayName,
-                icon: icon,
-                iconColor: color,
-                isSelected: isSelected,
-                onTap: () => onServiceChanged(isSelected ? null : type),
-              );
-            }),
-
-            // Botón de limpiar filtros
-            if (hasActiveFilters) ...[
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // ── TIER 1: SEGMENTO FIJO DE 3 ESTADOS (Sin scroll, accesible al 100%) ──
+          Row(
+            children: [
+              _buildStatusSegment(
+                key: const Key('filter_status_all'),
+                label: AppStrings.filterAll,
+                isSelected: selectedStatus == PaymentStatusFilter.all,
+                onTap: () => onStatusChanged(PaymentStatusFilter.all),
+              ),
               const SizedBox(width: AppSpacing.xs),
-              Semantics(
-                button: true,
-                label: 'Limpiar todos los filtros',
-                child: TextButton.icon(
-                  key: const Key('clear_filters_btn'),
-                  onPressed: onClear,
-                  icon: const Icon(Icons.close, size: 16, color: Colors.red),
-                  label: const Text(
-                    AppStrings.clearFilters,
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    minimumSize: const Size(48, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                  ),
-                ),
+              _buildStatusSegment(
+                key: const Key('filter_status_pending'),
+                label: AppStrings.filterPending,
+                icon: Icons.hourglass_empty_rounded,
+                isSelected: selectedStatus == PaymentStatusFilter.pending,
+                onTap: () => onStatusChanged(PaymentStatusFilter.pending),
+              ),
+              const SizedBox(width: AppSpacing.xs),
+              _buildStatusSegment(
+                key: const Key('filter_status_paid'),
+                label: AppStrings.filterPaid,
+                icon: Icons.check_circle_outline_rounded,
+                isSelected: selectedStatus == PaymentStatusFilter.paid,
+                onTap: () => onStatusChanged(PaymentStatusFilter.paid),
               ),
             ],
-          ],
-        ),
+          ),
+
+          const SizedBox(height: AppSpacing.xs),
+
+          // ── TIER 2: CHIPS DE SERVICIOS + LIMPIAR ──
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Row(
+              children: [
+                ...ServiceType.values.map((type) {
+                  final isSelected = selectedService == type;
+                  final (color, icon) = _serviceMeta(type);
+                  return Padding(
+                    padding: const EdgeInsets.only(right: AppSpacing.xs),
+                    child: _buildServiceChip(
+                      key: Key('filter_service_${type.name}'),
+                      label: type.displayName,
+                      color: color,
+                      icon: icon,
+                      isSelected: isSelected,
+                      onTap: () => onServiceChanged(isSelected ? null : type),
+                    ),
+                  );
+                }),
+
+                if (hasActiveFilters) ...[
+                  Semantics(
+                    button: true,
+                    label: 'Limpiar todos los filtros',
+                    child: InkWell(
+                      key: const Key('clear_filters_btn'),
+                      onTap: onClear,
+                      borderRadius: BorderRadius.circular(AppRadius.full),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFEE2E2),
+                          borderRadius: BorderRadius.circular(AppRadius.full),
+                          border: Border.all(
+                            color: const Color(0xFFEF4444),
+                            width: 1,
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.close,
+                              size: 14,
+                              color: Color(0xFFEF4444),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              AppStrings.clearFilters,
+                              style: TextStyle(
+                                color: Color(0xFFEF4444),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

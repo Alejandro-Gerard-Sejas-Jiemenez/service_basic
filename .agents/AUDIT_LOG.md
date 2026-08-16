@@ -484,4 +484,18 @@
 
 ---
 
+### [2026-08-16 15:30] Sesión 32 — Rediseño de Filtros en 2 Niveles, Solución de Overflows en Meses y Armonización de Paleta de Colores
+
+**Tarea:** Rediseño de filtros en 2 niveles (sin scroll doble), eliminación de overflows en tarjetas de meses y aplicación estricta de la paleta `AppColors` (blanco, negro, gris y tokens oficiales) en métricas.
+**Skill aplicada:** flutter-ui & dart-run-static-analysis
+**Fase PUDS:** Arquitectura → Diseño → Implementación → Prueba (Fase 4: ✅)
+**Archivos modificados:**
+- `lib/ui/features/home/views/widgets/monthly_group_card.dart` — Columnas flexibles con `FittedBox` en desgloses de montos para evitar desbordamientos.
+- `lib/ui/features/home/views/widgets/bill_item.dart` — Monto total flexible con `FittedBox` ante pantallas estrechas.
+- `lib/ui/features/home/views/widgets/home_filters_bar.dart` — Rediseñado en 2 niveles (Nivel 1 fijo de 3 segmentos de estado proporcionales + Nivel 2 chips de servicios compactos y limpiar).
+- `lib/ui/features/home/views/metrics_screen.dart` — Paleta sobria basada en `AppColors` (fondo `background`, tarjeta principal `headerBg`, acentos `owner`/`tenant`, tarjetas `cardBg` blancas con bordes `divider` gris e iconos temáticos).
+**Resultado:** ✅ Exitoso — **39/39 tests pasados al 100%** y **0 issues** en `flutter analyze`.
+
+---
+
 _[Las próximas sesiones se registran aquí]_

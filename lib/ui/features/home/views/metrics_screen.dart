@@ -24,7 +24,7 @@ class MetricsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.headerBg,
         foregroundColor: Colors.white,
@@ -66,11 +66,7 @@ class MetricsScreen extends StatelessWidget {
                   // ── 1. TARJETA PRINCIPAL: TOTAL ACUMULADO ──
                   Container(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF2D3A4A), Color(0xFF1E2631)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      color: AppColors.headerBg,
                       borderRadius: BorderRadius.circular(AppRadius.md),
                       boxShadow: const [
                         BoxShadow(
@@ -110,7 +106,7 @@ class MetricsScreen extends StatelessWidget {
                                 label: AppStrings.myTotal,
                                 value:
                                     '${viewModel.allTimeOwnerTotal.toStringAsFixed(1)} Bs',
-                                color: const Color(0xFF6EE7B7),
+                                color: AppColors.owner,
                               ),
                             ),
                             const SizedBox(width: AppSpacing.xs),
@@ -119,7 +115,7 @@ class MetricsScreen extends StatelessWidget {
                                 label: AppStrings.tenantTotal,
                                 value:
                                     '${viewModel.allTimeTenantTotal.toStringAsFixed(1)} Bs',
-                                color: const Color(0xFF93C5FD),
+                                color: AppColors.tenant,
                               ),
                             ),
                           ],
@@ -130,15 +126,16 @@ class MetricsScreen extends StatelessWidget {
 
                   const SizedBox(height: AppSpacing.md),
 
-                  // ── 2. PAGADO VS PENDIENTE ──
+                  // ── 2. ESTADO DE GASTOS: PAGADO VS PENDIENTE ──
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(color: AppColors.divider),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x0A000000),
-                          blurRadius: 6,
+                          color: Color(0x06000000),
+                          blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
                       ],
@@ -163,7 +160,7 @@ class MetricsScreen extends StatelessWidget {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF10B981),
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],
@@ -176,11 +173,11 @@ class MetricsScreen extends StatelessWidget {
                                 ? 0.0
                                 : viewModel.allTimePaidTotal /
                                       viewModel.allTimeTotal,
-                            backgroundColor: const Color(0xFFFEE2E2),
+                            backgroundColor: const Color(0xFFE2E8F0),
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFF10B981),
+                              AppColors.textPrimary,
                             ),
-                            minHeight: 10,
+                            minHeight: 8,
                           ),
                         ),
                         const SizedBox(height: AppSpacing.sm),
@@ -191,18 +188,22 @@ class MetricsScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   const Icon(
-                                    Icons.check_circle_rounded,
+                                    Icons.check_circle_outline_rounded,
                                     size: 15,
-                                    color: Color(0xFF10B981),
+                                    color: AppColors.textPrimary,
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
-                                    child: Text(
-                                      'Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: AppColors.textSecondary,
-                                        fontWeight: FontWeight.w500,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Pagado: ${viewModel.allTimePaidTotal.toStringAsFixed(1)} Bs',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: AppColors.textSecondary,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -216,19 +217,23 @@ class MetricsScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   const Icon(
-                                    Icons.hourglass_top_rounded,
+                                    Icons.hourglass_empty_rounded,
                                     size: 15,
-                                    color: Color(0xFFEF4444),
+                                    color: AppColors.owner,
                                   ),
                                   const SizedBox(width: 4),
                                   Flexible(
-                                    child: Text(
-                                      'Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
-                                      textAlign: TextAlign.end,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFFEF4444),
-                                        fontWeight: FontWeight.w600,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                        'Pendiente: ${viewModel.allTimePendingTotal.toStringAsFixed(1)} Bs',
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: AppColors.owner,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -246,12 +251,13 @@ class MetricsScreen extends StatelessWidget {
                   // ── 3. PROMEDIO MENSUAL ──
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(color: AppColors.divider),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x0A000000),
-                          blurRadius: 6,
+                          color: Color(0x06000000),
+                          blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
                       ],
@@ -260,15 +266,16 @@ class MetricsScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Container(
-                          width: 44,
-                          height: 44,
+                          width: 40,
+                          height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFEEF2FF),
+                            color: const Color(0xFFF1F5F9),
                             borderRadius: BorderRadius.circular(AppRadius.sm),
                           ),
                           child: const Icon(
                             Icons.calendar_month,
-                            color: Color(0xFF4F46E5),
+                            color: AppColors.headerBg,
+                            size: 20,
                           ),
                         ),
                         const SizedBox(width: AppSpacing.md),
@@ -311,12 +318,13 @@ class MetricsScreen extends StatelessWidget {
                   // ── 4. DISTRIBUCIÓN POR SERVICIO ──
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(color: AppColors.divider),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x0A000000),
-                          blurRadius: 6,
+                          color: Color(0x06000000),
+                          blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
                       ],
@@ -374,10 +382,10 @@ class MetricsScreen extends StatelessWidget {
                                     ),
                                     Text(
                                       '${amount.toStringAsFixed(1)} Bs (${(pct * 100).toStringAsFixed(0)}%)',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold,
-                                        color: color,
+                                        color: AppColors.textPrimary,
                                       ),
                                     ),
                                   ],
@@ -393,7 +401,7 @@ class MetricsScreen extends StatelessWidget {
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       color,
                                     ),
-                                    minHeight: 8,
+                                    minHeight: 6,
                                   ),
                                 ),
                               ],
@@ -409,12 +417,13 @@ class MetricsScreen extends StatelessWidget {
                   // ── 5. HISTORIAL MENSUAL COMPARATIVO ──
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.cardBg,
                       borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(color: AppColors.divider),
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x0A000000),
-                          blurRadius: 6,
+                          color: Color(0x06000000),
+                          blurRadius: 4,
                           offset: Offset(0, 2),
                         ),
                       ],

@@ -117,20 +117,26 @@ class BillItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: AppSpacing.xs),
 
           // Monto total
-          Text(
-            '${bill.totalAmount.toStringAsFixed(1)} Bs',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: bill.isPaid
-                  ? AppColors.textSecondary.withValues(alpha: 0.5)
-                  : AppColors.textPrimary,
-              decoration: bill.isPaid
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${bill.totalAmount.toStringAsFixed(1)} Bs',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: bill.isPaid
+                      ? AppColors.textSecondary.withValues(alpha: 0.5)
+                      : AppColors.textPrimary,
+                  decoration: bill.isPaid
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
             ),
           ),
 
